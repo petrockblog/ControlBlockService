@@ -1,0 +1,25 @@
+[{
+  "file": "/Users/florian/github/ControlBLockService/main.cpp",
+  "directory": "/Users/florian/github/ControlBLockService",
+  "command": "/usr/bin/g++  -c /Users/florian/github/ControlBLockService/main.cpp -o /Users/florian/github/ControlBLockService/main.cpp.o  -g  -O0  -Wall -I. -I."
+ }, {
+  "file": "/Users/florian/github/ControlBLockService/ControlBlock.cpp",
+  "directory": "/Users/florian/github/ControlBLockService",
+  "command": "/usr/bin/g++  -c /Users/florian/github/ControlBLockService/ControlBlock.cpp -o /Users/florian/github/ControlBLockService/ControlBlock.cpp.o  -g  -O0  -Wall -I. -I."
+ }, {
+  "file": "/Users/florian/github/ControlBLockService/PowerSwitch.cpp",
+  "directory": "/Users/florian/github/ControlBLockService",
+  "command": "/usr/bin/g++  -c /Users/florian/github/ControlBLockService/PowerSwitch.cpp -o /Users/florian/github/ControlBLockService/PowerSwitch.cpp.o  -g  -O0  -Wall -I. -I."
+ }, {
+  "file": "/Users/florian/github/ControlBLockService/DigitalOut.cpp",
+  "directory": "/Users/florian/github/ControlBLockService",
+  "command": "/usr/bin/g++  -c /Users/florian/github/ControlBLockService/DigitalOut.cpp -o /Users/florian/github/ControlBLockService/DigitalOut.cpp.o  -g  -O0  -Wall -I. -I."
+ }, {
+  "file": "/Users/florian/github/ControlBLockService/DigitalIn.cpp",
+  "directory": "/Users/florian/github/ControlBLockService",
+  "command": "/usr/bin/g++  -c /Users/florian/github/ControlBLockService/DigitalIn.cpp -o /Users/florian/github/ControlBLockService/DigitalIn.cpp.o  -g  -O0  -Wall -I. -I."
+ }, {
+  "file": "/Users/florian/github/ControlBLockService/UInputGamepad.cpp",
+  "directory": "/Users/florian/github/ControlBLockService",
+  "command": "/usr/bin/g++  -c /Users/florian/github/ControlBLockService/UInputGamepad.cpp -o /Users/florian/github/ControlBLockService/UInputGamepad.cpp.o  -g  -O0  -Wall -I. -I."
+ }]
