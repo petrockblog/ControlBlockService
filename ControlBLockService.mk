@@ -5,15 +5,15 @@
 ## Debug
 ProjectName            :=ControlBLockService
 ConfigurationName      :=Debug
-WorkspacePath          := "/Users/florian/github/ControlBLockService"
-ProjectPath            := "/Users/florian/github/ControlBLockService"
+WorkspacePath          := "/Users/florian/github/local/ControlBlockService"
+ProjectPath            := "/Users/florian/github/local/ControlBlockService"
 IntermediateDirectory  :=./Debug
 OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
-User                   :=Florian Müller
-Date                   :=2014-11-22
+User                   :=Florian Mueller
+Date                   :=2014-11-23
 CodeLitePath           :="/Users/florian/Library/Application Support/codelite"
 LinkerName             :=/usr/bin/g++ 
 SharedObjectLinkerName :=/usr/bin/g++ -dynamiclib -fPIC
@@ -59,8 +59,8 @@ AS       := /usr/bin/as
 ##
 ## User defined environment variables
 ##
-CodeLiteDir:=/Users/florian/Desktop/codelite.app/Contents/SharedSupport/
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/ControlBlock.cpp$(ObjectSuffix) $(IntermediateDirectory)/PowerSwitch.cpp$(ObjectSuffix) $(IntermediateDirectory)/DigitalOut.cpp$(ObjectSuffix) $(IntermediateDirectory)/DigitalIn.cpp$(ObjectSuffix) $(IntermediateDirectory)/UInputGamepad.cpp$(ObjectSuffix) 
+CodeLiteDir:=/Applications/codelite.app/Contents/SharedSupport/
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/ControlBlock.cpp$(ObjectSuffix) $(IntermediateDirectory)/PowerSwitch.cpp$(ObjectSuffix) $(IntermediateDirectory)/DigitalOut.cpp$(ObjectSuffix) $(IntermediateDirectory)/DigitalIn.cpp$(ObjectSuffix) $(IntermediateDirectory)/UInputGamepad.cpp$(ObjectSuffix) $(IntermediateDirectory)/I2C8bit.cpp$(ObjectSuffix) 
 
 
 
@@ -88,7 +88,7 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/main.cpp$(ObjectSuffix): main.cpp $(IntermediateDirectory)/main.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/Users/florian/github/ControlBLockService/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/Users/florian/github/local/ControlBlockService/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/main.cpp$(DependSuffix): main.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/main.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/main.cpp$(DependSuffix) -MM "main.cpp"
 
@@ -96,7 +96,7 @@ $(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) "main.cpp"
 
 $(IntermediateDirectory)/ControlBlock.cpp$(ObjectSuffix): ControlBlock.cpp $(IntermediateDirectory)/ControlBlock.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/Users/florian/github/ControlBLockService/ControlBlock.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/ControlBlock.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/Users/florian/github/local/ControlBlockService/ControlBlock.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/ControlBlock.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/ControlBlock.cpp$(DependSuffix): ControlBlock.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/ControlBlock.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/ControlBlock.cpp$(DependSuffix) -MM "ControlBlock.cpp"
 
@@ -104,7 +104,7 @@ $(IntermediateDirectory)/ControlBlock.cpp$(PreprocessSuffix): ControlBlock.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ControlBlock.cpp$(PreprocessSuffix) "ControlBlock.cpp"
 
 $(IntermediateDirectory)/PowerSwitch.cpp$(ObjectSuffix): PowerSwitch.cpp $(IntermediateDirectory)/PowerSwitch.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/Users/florian/github/ControlBLockService/PowerSwitch.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/PowerSwitch.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/Users/florian/github/local/ControlBlockService/PowerSwitch.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/PowerSwitch.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/PowerSwitch.cpp$(DependSuffix): PowerSwitch.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/PowerSwitch.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/PowerSwitch.cpp$(DependSuffix) -MM "PowerSwitch.cpp"
 
@@ -112,7 +112,7 @@ $(IntermediateDirectory)/PowerSwitch.cpp$(PreprocessSuffix): PowerSwitch.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/PowerSwitch.cpp$(PreprocessSuffix) "PowerSwitch.cpp"
 
 $(IntermediateDirectory)/DigitalOut.cpp$(ObjectSuffix): DigitalOut.cpp $(IntermediateDirectory)/DigitalOut.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/Users/florian/github/ControlBLockService/DigitalOut.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/DigitalOut.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/Users/florian/github/local/ControlBlockService/DigitalOut.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/DigitalOut.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/DigitalOut.cpp$(DependSuffix): DigitalOut.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/DigitalOut.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/DigitalOut.cpp$(DependSuffix) -MM "DigitalOut.cpp"
 
@@ -120,7 +120,7 @@ $(IntermediateDirectory)/DigitalOut.cpp$(PreprocessSuffix): DigitalOut.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/DigitalOut.cpp$(PreprocessSuffix) "DigitalOut.cpp"
 
 $(IntermediateDirectory)/DigitalIn.cpp$(ObjectSuffix): DigitalIn.cpp $(IntermediateDirectory)/DigitalIn.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/Users/florian/github/ControlBLockService/DigitalIn.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/DigitalIn.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/Users/florian/github/local/ControlBlockService/DigitalIn.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/DigitalIn.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/DigitalIn.cpp$(DependSuffix): DigitalIn.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/DigitalIn.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/DigitalIn.cpp$(DependSuffix) -MM "DigitalIn.cpp"
 
@@ -128,12 +128,20 @@ $(IntermediateDirectory)/DigitalIn.cpp$(PreprocessSuffix): DigitalIn.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/DigitalIn.cpp$(PreprocessSuffix) "DigitalIn.cpp"
 
 $(IntermediateDirectory)/UInputGamepad.cpp$(ObjectSuffix): UInputGamepad.cpp $(IntermediateDirectory)/UInputGamepad.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/Users/florian/github/ControlBLockService/UInputGamepad.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/UInputGamepad.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/Users/florian/github/local/ControlBlockService/UInputGamepad.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/UInputGamepad.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/UInputGamepad.cpp$(DependSuffix): UInputGamepad.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/UInputGamepad.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/UInputGamepad.cpp$(DependSuffix) -MM "UInputGamepad.cpp"
 
 $(IntermediateDirectory)/UInputGamepad.cpp$(PreprocessSuffix): UInputGamepad.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/UInputGamepad.cpp$(PreprocessSuffix) "UInputGamepad.cpp"
+
+$(IntermediateDirectory)/I2C8bit.cpp$(ObjectSuffix): I2C8bit.cpp $(IntermediateDirectory)/I2C8bit.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/Users/florian/github/local/ControlBlockService/I2C8bit.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/I2C8bit.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/I2C8bit.cpp$(DependSuffix): I2C8bit.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/I2C8bit.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/I2C8bit.cpp$(DependSuffix) -MM "I2C8bit.cpp"
+
+$(IntermediateDirectory)/I2C8bit.cpp$(PreprocessSuffix): I2C8bit.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/I2C8bit.cpp$(PreprocessSuffix) "I2C8bit.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

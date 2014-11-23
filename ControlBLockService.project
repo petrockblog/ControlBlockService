@@ -111,6 +111,10 @@
     <File Name="DigitalIn.cpp"/>
     <File Name="UInputGamepad.h"/>
     <File Name="UInputGamepad.cpp"/>
+    <File Name="I2C8bit.h"/>
+    <File Name="I2C8bit.cpp"/>
+    <File Name="GPIO.h"/>
+    <File Name="GPIO.cpp"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>

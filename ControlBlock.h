@@ -14,7 +14,7 @@ public:
 
 	ControlBlock();
 	~ControlBlock();
-	
+
 	inline void update() {
 		updateGamepads();
 		updatePowerSwitch();
