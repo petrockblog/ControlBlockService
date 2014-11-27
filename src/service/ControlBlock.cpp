@@ -1,22 +1,24 @@
 #include "ControlBlock.h"
 
-ControlBlock::ControlBlock() : powerSwitch(PowerSwitch())
-{
+ControlBlock::ControlBlock() : powerSwitch(PowerSwitch()) {
 	for (uint8_t counter = 0; counter<NUMGAMEPADS; counter++) {
 		gamepads[counter] = new UInputGamepad();
 	}
 }
 
-ControlBlock::~ControlBlock()
-{
+ControlBlock::~ControlBlock() {
 	for (uint8_t counter = 0; counter<NUMGAMEPADS; counter++) {
 		delete gamepads[counter];
 		gamepads[counter] = 0;
 	}
 }
 
-void ControlBlock::updateGamepads()
-{
+void ControlBlock::update() {
+	// updateGamepads();
+	updatePowerSwitch();
+}
+
+void ControlBlock::updateGamepads() {
 	DigitalIn di = DigitalIn::getInstance();
 	// axes
 	gamepads[0]->setKeyState(ABS_X, di.getLevel(DigitalIn::DI_CHANNEL_P1_LEFT) == DigitalIn::DI_LEVEL_LOW ? 2 : 0, EV_ABS);
@@ -53,11 +55,9 @@ void ControlBlock::updateGamepads()
 	gamepads[1]->setKeyState(BTN_TR, di.getLevel(DigitalIn::DI_CHANNEL_P2_SW8) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
 	gamepads[1]->setKeyState(BTN_START, di.getLevel(DigitalIn::DI_CHANNEL_P2_START) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
 	gamepads[1]->setKeyState(BTN_SELECT, di.getLevel(DigitalIn::DI_CHANNEL_P2_COIN) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-
 }
 
-void ControlBlock::updatePowerSwitch()
-{
+void ControlBlock::updatePowerSwitch() {
 	if (powerSwitch.getShutdownSignal() == PowerSwitch::SHUTDOWN_TRUE) {
 		system("shutdown -t 3 -h now");
 	}

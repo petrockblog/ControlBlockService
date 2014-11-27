@@ -48,7 +48,7 @@ public:
 	~DigitalIn();
 
 	static DigitalIn& getInstance() {
-		static DigitalIn digitalIn;
+		static DigitalIn digitalIn = DigitalIn();
 		return digitalIn;
 	}
 

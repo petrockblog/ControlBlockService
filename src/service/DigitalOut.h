@@ -17,7 +17,7 @@ public:
 	~DigitalOut();
 
 	static DigitalOut& getInstance() {
-		static DigitalOut digitalOut;
+		static DigitalOut digitalOut = DigitalOut();
 		return digitalOut;
 	}
 
