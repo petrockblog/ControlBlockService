@@ -18,7 +18,7 @@ UInputGamepad::UInputGamepad() {
 
 	struct uinput_user_dev uinp;
 	memset(&uinp, 0, sizeof(uinp));
-	strncpy(uinp.name, "SNES-to-Gamepad Device", strlen("SNES-to-Gamepad Device"));
+	strncpy(uinp.name, "ControlBlock Gamepad", strlen("ControlBlock Gamepad"));
 	uinp.id.version = 4;
 	uinp.id.bustype = BUS_USB;
 	uinp.id.product = 1;
@@ -31,12 +31,16 @@ UInputGamepad::UInputGamepad() {
 	// gamepad, buttons
 	ioctl(uinp_fd, UI_SET_KEYBIT, BTN_A);
 	ioctl(uinp_fd, UI_SET_KEYBIT, BTN_B);
+	ioctl(uinp_fd, UI_SET_KEYBIT, BTN_C);
 	ioctl(uinp_fd, UI_SET_KEYBIT, BTN_X);
 	ioctl(uinp_fd, UI_SET_KEYBIT, BTN_Y);
+	ioctl(uinp_fd, UI_SET_KEYBIT, BTN_Z);
 	ioctl(uinp_fd, UI_SET_KEYBIT, BTN_TL);
 	ioctl(uinp_fd, UI_SET_KEYBIT, BTN_TR);
-	ioctl(uinp_fd, UI_SET_KEYBIT, BTN_SELECT);
+	ioctl(uinp_fd, UI_SET_KEYBIT, BTN_TL2);
+	ioctl(uinp_fd, UI_SET_KEYBIT, BTN_TR2);
 	ioctl(uinp_fd, UI_SET_KEYBIT, BTN_START);
+	ioctl(uinp_fd, UI_SET_KEYBIT, BTN_SELECT);
 
 	// gamepad, directions
 	ioctl(uinp_fd, UI_SET_EVBIT, EV_ABS);
@@ -50,7 +54,7 @@ UInputGamepad::UInputGamepad() {
 	/* Create input device into input sub-system */
 	write(uinp_fd, &uinp, sizeof(uinp));
 	if (ioctl(uinp_fd, UI_DEV_CREATE)) {
-		printf("[SNESDev-Rpi] Unable to create UINPUT device.");
+		printf("[UInputGamepad] Unable to create UINPUT device.");
 		throw -1;
 	}
 
@@ -72,7 +76,7 @@ void UInputGamepad::setKeyState(uint16_t keycode, int16_t keyvalue, uint16_t evt
 	event.value = keyvalue;
 
 	if (write(uinp_fd, &event, sizeof(event)) < 0) {
-		printf("[SNESDev-Rpi] Simulate key error\n");
+		printf("[UInputGamepad] Simulate key error\n");
 	}
 
 	event.type = EV_SYN;
@@ -80,6 +84,6 @@ void UInputGamepad::setKeyState(uint16_t keycode, int16_t keyvalue, uint16_t evt
 	event.value = 0;
 	write(uinp_fd, &event, sizeof(event));
 	if (write(uinp_fd, &event, sizeof(event)) < 0) {
-		printf("[SNESDev-Rpi] Simulate key error\n");
+		printf("[UInputGamepad] Simulate key error\n");
 	}
 }
