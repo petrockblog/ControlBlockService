@@ -12,19 +12,9 @@ extern "C" {
 	void sig_handler(int signo) {
 		// int16_t ctr = 0;
 
-		if ((signo == SIGINT) | (signo == SIGQUIT) | (signo == SIGABRT) | (signo =
+		if ((signo == SIGINT) | (signo == SIGQUIT) | (signo == SIGABRT) | (signo ==
 				SIGTERM)) {
 			printf("[ControlBlockService] Releasing input devices.\n");
-			// pollButton = 0;
-			// pollPads = 0;
-			// uinput_kbd_close(&uinp_kbd);
-			// for (ctr = 0; ctr < GPADSNUM; ctr++) {
-			// 	uinput_gpad_close(&uinp_gpads[ctr]);
-			// }
-		    // cfg_free(cfg);
-		    // free(confres.gamepad1_type);
-		    // free(confres.gamepad2_type);
-
 			doRun = 0;
 		}
 	}
