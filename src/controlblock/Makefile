@@ -1,11 +1,15 @@
 CC=g++
 SRCDIR=.
 BUILDDIR=../../build
-LIBWIRINGPI_DIR=/usr/local
-LIBWIRINGPI_INCDIR=$(LIBWIRINGPI_DIR)/include
-LIBWIRINGPI_LIBDIR=$(LIBWIRINGPI_DIR)/lib
-LIBS=-lwiringPi -L$(LIBWIRINGPI_LIBDIR) -I$(LIBWIRINGPI_INCDIR) -lrt -lpthread
-CFLAGS=-c -Wall -O3 -std=c++11 -I$(LIBWIRINGPI_INCDIR)
+LIBWIRINGPI_DIR=../lib/wiringPi/wiringPi
+LIBWIRINGPI_INCDIR=$(LIBWIRINGPI_DIR)
+LIBWIRINGPI_LIBDIR=$(LIBWIRINGPI_DIR)
+LIBJSONCPP_DIR=../lib/jsoncpp
+LIBJSONCPP_INCDIR=$(LIBJSONCPP_DIR)/include
+LIBJSONCPP_LIBDIR=$(LIBJSONCPP_DIR)/build/release/lib
+LIBS=-lwiringPi -ljsoncpp -L$(LIBWIRINGPI_LIBDIR) -I$(LIBWIRINGPI_INCDIR) -L$(LIBJSONCPP_LIBDIR) -I$(LIBJSONCPP_INCDIR) -lrt -lpthread
+CFLAGS=-c -Wall -O3 -std=c++11 -I$(LIBWIRINGPI_INCDIR) -I$(LIBJSONCPP_INCDIR)
+# CFLAGS=-c -Wall -O3 -Weffc++ -std=c++11 -I$(LIBWIRINGPI_INCDIR) -I$(LIBJSONCPP_INCDIR)
 
 TARGET := $(BUILDDIR)/controlblock
 SRCEXT := cpp
@@ -13,7 +17,7 @@ SOURCES := $(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)")
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 DEPS := $(OBJECTS:.o=.deps)
 
-all $(TARGET): $(LIBWIRINGPI_LIBDIR)/libwiringPi.a $(OBJECTS)
+all $(TARGET): $(LIBWIRINGPI_LIBDIR)/libwiringPi.a $(LIBJSONCPP_LIBDIR)/libjsoncpp.a $(OBJECTS)
 	@echo " Linking..."; $(CC) $^ $(LIBS) -o $(TARGET)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
@@ -22,8 +26,11 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 
 $(LIBWIRINGPI_LIBDIR)/libwiringPi.a:
 	cd ../lib/wiringPi/wiringPi/ && $(MAKE) static
-	cd ../lib/wiringPi/wiringPi/ && $(MAKE) install-static
-	cd ../lib/wiringPi/wiringPi/ && $(MAKE) install-headers
+	
+$(LIBJSONCPP_LIBDIR)/libjsoncpp.a:
+	cd ../lib/jsoncpp/ && mkdir -p build/release
+	cd ../lib/jsoncpp/build/release && cmake -DCMAKE_BUILD_TYPE=release -DJSONCPP_LIB_BUILD_SHARED=OFF -G "Unix Makefiles" ../..
+	cd ../lib/jsoncpp/build/release && make	
 
 check:
 	# TO BE DONE! JUST A DUMMY FOR NOW

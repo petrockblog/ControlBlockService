@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <iostream>
 #include <chrono>
 #include <thread>
 #include <signal.h>
@@ -10,8 +11,6 @@ static volatile sig_atomic_t doRun = 1;
 
 extern "C" {
 	void sig_handler(int signo) {
-		// int16_t ctr = 0;
-
 		if ((signo == SIGINT) | (signo == SIGQUIT) | (signo == SIGABRT) | (signo ==
 				SIGTERM)) {
 			printf("[ControlBlockService] Releasing input devices.\n");
@@ -34,13 +33,16 @@ void register_signalhandlers() {
 
 int main(int argc, char **argv)
 {
-	register_signalhandlers();
+	try {
+		register_signalhandlers();
 
-	ControlBlock controlBlock = ControlBlock();
-
-	while (doRun) {
-		controlBlock.update();
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		ControlBlock controlBlock = ControlBlock();
+		while (doRun) {
+			controlBlock.update();
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		}		
+	} catch (int errno) {
+		std::cout << "Erro while running main loop. Error number: " << errno << std::endl;
 	}
 
 	return 0;

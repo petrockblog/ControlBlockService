@@ -4,10 +4,8 @@
 #include "DigitalOut.h"
 #include "DigitalIn.h"
 
-class PowerSwitch
-{
+class PowerSwitch {
 public:
-
 	typedef enum {
 	    STATE_OFF = 0,
 	    STATE_ON
@@ -18,13 +16,21 @@ public:
 	    SHUTDOWN_FALSE
 	} ShutdownSignal_e;
 
-	PowerSwitch();
+	typedef enum {
+		SHUTDOWN_ACTIVATED = 0,
+		SHUTDOWN_DEACTIVATED
+	} ShutdownActivated_e;
+
+	PowerSwitch(ShutdownActivated_e doShutdown);
 	~PowerSwitch();
+
+	void update();
+
+private:
+	ShutdownActivated_e doShutdown;
 
 	void setPowerSignal(PowerState_e state);
 	ShutdownSignal_e getShutdownSignal();
-
-private:
 
 };
 

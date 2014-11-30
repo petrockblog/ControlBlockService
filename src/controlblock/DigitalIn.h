@@ -1,9 +1,14 @@
 #ifndef DIGITALIN_H
 #define DIGITALIN_H
 
+#include <stdint.h>
+
 class DigitalIn
 {
 public:
+	const uint32_t MCPBASE1 = 100;
+	const uint32_t MCPBASE2 = 116;
+
 	typedef enum {
 	    DI_CHANNEL_FROMPOWERSWITCH = 0,
 	    DI_CHANNEL_P1_RIGHT,
@@ -37,13 +42,20 @@ public:
 	    DI_CHANNEL_P2_START,
 	    DI_CHANNEL_P2_COIN,
 	    DI_CHANNEL_P2_A,
-	    DI_CHANNEL_P2_B
+	    DI_CHANNEL_P2_B,
+	    DI_CHANNEL_P1_DATA,
+	    DI_CHANNEL_P2_DATA
 	} DI_Channel_e;
 
 	typedef enum {
 	    DI_LEVEL_LOW = 0,
 	    DI_LEVEL_HIGH
 	} DI_Level_e;
+
+	typedef enum {
+		DI_MODE_ALLIN = 0,
+		DI_MODE_SNES
+	} DI_Mode_e;
 
 	~DigitalIn();
 
@@ -52,12 +64,14 @@ public:
 		return digitalIn;
 	}
 
+	void setMode(DI_Mode_e mode);
 	void updateLevels();
 	DI_Level_e getLevel(DI_Channel_e channel);
 
 private:
-	DigitalIn();
+	DI_Mode_e mode;
 
+	DigitalIn();
 };
 
 #endif // DIGITALIN_H

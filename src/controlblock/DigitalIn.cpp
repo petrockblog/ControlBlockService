@@ -3,25 +3,40 @@
 #include <mcp23017.h>
 #include "DigitalIn.h"
 
-constexpr uint32_t MCPBASE1 = 100;
-constexpr uint32_t MCPBASE2 = 116;
-
-
-DigitalIn::DigitalIn() {
-	wiringPiSetup ();
-	mcp23017Setup (MCPBASE1, 0x20);
-	mcp23017Setup (MCPBASE2, 0x27);	
-
-	pinMode(1, INPUT);
-	for (int32_t i = 0 ; i < 16 ; ++i) {
-		pinMode (MCPBASE1 + i, INPUT);
-		pinMode (MCPBASE2 + i, INPUT);
-		pullUpDnControl (MCPBASE1 + i, PUD_UP);
-		pullUpDnControl (MCPBASE2 + i, PUD_UP);
-	}	
+DigitalIn::DigitalIn() : mode(DI_MODE_ALLIN) {
+	setMode(mode);
 }
 
 DigitalIn::~DigitalIn() {
+}
+
+void DigitalIn::setMode(DI_Mode_e mode) {
+	this->mode = mode;
+
+	switch (mode) {
+		case DI_MODE_ALLIN:
+			pinMode(1, INPUT);
+			for (int32_t i = 0 ; i < 16 ; ++i) {
+				pinMode (MCPBASE1 + i, INPUT);
+				pinMode (MCPBASE2 + i, INPUT);
+				pullUpDnControl (MCPBASE1 + i, PUD_UP);
+				pullUpDnControl (MCPBASE2 + i, PUD_UP);
+			}	
+			break;
+		case DI_MODE_SNES:
+			pinMode(1, INPUT);
+			for (int32_t i = 0 ; i < 16 ; ++i) {
+				if ((i != 0) && (i != 1) && (i != 2) && (i != 13) && (i != 14) && (i != 15)) {
+					pinMode (MCPBASE1 + i, INPUT);
+					pullUpDnControl (MCPBASE1 + i, PUD_UP);
+				}
+				pinMode (MCPBASE2 + i, INPUT);
+				pullUpDnControl (MCPBASE2 + i, PUD_UP);
+			}
+			break;
+		default:
+			throw 50;
+	}
 }
 
 DigitalIn::DI_Level_e DigitalIn::getLevel(DigitalIn::DI_Channel_e channel) {
@@ -126,6 +141,12 @@ DigitalIn::DI_Level_e DigitalIn::getLevel(DigitalIn::DI_Channel_e channel) {
 			break;
 		case DI_CHANNEL_P2_B:
 			returnLevel = digitalRead(MCPBASE2 + 8) == HIGH ? DI_LEVEL_LOW : DI_LEVEL_HIGH;
+			break;
+		case DI_CHANNEL_P1_DATA:
+			returnLevel = digitalRead(MCPBASE1 + 3) == HIGH ? DI_LEVEL_LOW : DI_LEVEL_HIGH;
+			break;
+		case DI_CHANNEL_P2_DATA:
+			returnLevel = digitalRead(MCPBASE1 + 12) == HIGH ? DI_LEVEL_LOW : DI_LEVEL_HIGH;
 			break;
 	}
 	return returnLevel;

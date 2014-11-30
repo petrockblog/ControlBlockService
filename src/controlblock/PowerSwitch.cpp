@@ -1,10 +1,23 @@
+#include <stdlib.h>
 #include "PowerSwitch.h"
 
-PowerSwitch::PowerSwitch() {
+PowerSwitch::PowerSwitch(ShutdownActivated_e doShutdown) : doShutdown(SHUTDOWN_ACTIVATED) {
 	setPowerSignal(PowerSwitch::STATE_ON);
 }
 
 PowerSwitch::~PowerSwitch() {
+}
+
+void PowerSwitch::update() {
+	static bool isShutdownInitiated = false;
+	
+	if ((doShutdown == SHUTDOWN_ACTIVATED) && 
+		(getShutdownSignal() == SHUTDOWN_TRUE) && 
+		(isShutdownInitiated == false)) 
+	{
+		system("shutdown -t 3 -h now");
+		isShutdownInitiated = true;
+	}	
 }
 
 void PowerSwitch::setPowerSignal(PowerState_e state) {
