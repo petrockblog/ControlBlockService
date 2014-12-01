@@ -20,7 +20,7 @@ void ControlBlockConfiguration::initialize()
 		Json::Value root;   // will contains the root value after parsing.
 		Json::Reader reader;
 
-		std::ifstream t("controlblockconfig.cfg");
+		std::ifstream t("/etc/controlblockconfig.cfg");
 		std::string config_doc((std::istreambuf_iterator<char>(t)),
 		                 		std::istreambuf_iterator<char>());
 

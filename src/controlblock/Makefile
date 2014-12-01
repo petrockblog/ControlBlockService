@@ -44,10 +44,10 @@ clean:
 install:
 	install -d $(DESTDIR)$(bindir)
 	install -m 0755 $(TARGET) $(DESTDIR)$(bindir)
-	# install -m 0755 ../supplementary/snesdev.cfg $(DESTDIR)/$(sysconfdir)
+	install -m 0755 ../../supplementary/controlblockconfig.cfg $(DESTDIR)/$(sysconfdir)
 
 uninstall:
 	-rm $(DESTDIR)$(bindir)/$(TARGET)
-	# -rm $(DESTDIR)/$(sysconfdir)/snesdev.cfg
+	-rm $(DESTDIR)/$(sysconfdir)/controlblockconfig.cfg
 
 .PHONY: clean install uninstall

@@ -17,6 +17,8 @@ ArcadeGamepad::~ArcadeGamepad() {
 }
 
 void ArcadeGamepad::initialize(InputDevice::Channel_e channel) {
+	DigitalIn::getInstance().setMode(DigitalIn::DI_MODE_ALLIN);
+
 	uinp_fd = UInputcpp::getHandle();
 	this->channel = channel;
 
@@ -68,24 +70,25 @@ void ArcadeGamepad::initialize(InputDevice::Channel_e channel) {
 
 void ArcadeGamepad::update() {
 	DigitalIn di = DigitalIn::getInstance();
-	// axes
-	if (di.getLevel(DigitalIn::DI_CHANNEL_P1_LEFT) == DigitalIn::DI_LEVEL_HIGH) {
-		UInputcpp::setKeyState(uinp_fd, ABS_X, 0, EV_ABS);
-	} else if (di.getLevel(DigitalIn::DI_CHANNEL_P1_RIGHT) == DigitalIn::DI_LEVEL_HIGH) {
-		UInputcpp::setKeyState(uinp_fd, ABS_X, 4, EV_ABS);
-	} else {
-		UInputcpp::setKeyState(uinp_fd, ABS_X, 2, EV_ABS);
-	}
-	if (di.getLevel(DigitalIn::DI_CHANNEL_P1_UP) == DigitalIn::DI_LEVEL_HIGH) {
-		UInputcpp::setKeyState(uinp_fd, ABS_Y, 0, EV_ABS);
-	} else if (di.getLevel(DigitalIn::DI_CHANNEL_P1_DOWN) == DigitalIn::DI_LEVEL_HIGH) {
-		UInputcpp::setKeyState(uinp_fd, ABS_Y, 4, EV_ABS);
-	} else {
-		UInputcpp::setKeyState(uinp_fd, ABS_Y, 2, EV_ABS);
-	}
 
-	// buttons
 	if (channel == InputDevice::CHANNEL_1) {
+		// axes
+		if (di.getLevel(DigitalIn::DI_CHANNEL_P1_LEFT) == DigitalIn::DI_LEVEL_HIGH) {
+			UInputcpp::setKeyState(uinp_fd, ABS_X, 0, EV_ABS);
+		} else if (di.getLevel(DigitalIn::DI_CHANNEL_P1_RIGHT) == DigitalIn::DI_LEVEL_HIGH) {
+			UInputcpp::setKeyState(uinp_fd, ABS_X, 4, EV_ABS);
+		} else {
+			UInputcpp::setKeyState(uinp_fd, ABS_X, 2, EV_ABS);
+		}
+		if (di.getLevel(DigitalIn::DI_CHANNEL_P1_UP) == DigitalIn::DI_LEVEL_HIGH) {
+			UInputcpp::setKeyState(uinp_fd, ABS_Y, 0, EV_ABS);
+		} else if (di.getLevel(DigitalIn::DI_CHANNEL_P1_DOWN) == DigitalIn::DI_LEVEL_HIGH) {
+			UInputcpp::setKeyState(uinp_fd, ABS_Y, 4, EV_ABS);
+		} else {
+			UInputcpp::setKeyState(uinp_fd, ABS_Y, 2, EV_ABS);
+		}
+
+		// buttons
 		UInputcpp::setKeyState(uinp_fd, BTN_A, di.getLevel(DigitalIn::DI_CHANNEL_P1_SW1) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
 		UInputcpp::setKeyState(uinp_fd, BTN_B, di.getLevel(DigitalIn::DI_CHANNEL_P1_SW2) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
 		UInputcpp::setKeyState(uinp_fd, BTN_C, di.getLevel(DigitalIn::DI_CHANNEL_P1_SW3) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
@@ -99,6 +102,23 @@ void ArcadeGamepad::update() {
 		UInputcpp::setKeyState(uinp_fd, BTN_TL2, di.getLevel(DigitalIn::DI_CHANNEL_P1_A) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
 		UInputcpp::setKeyState(uinp_fd, BTN_TR2, di.getLevel(DigitalIn::DI_CHANNEL_P1_B) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);	
 	} else if (channel == InputDevice::CHANNEL_2) {
+		// axes
+		if (di.getLevel(DigitalIn::DI_CHANNEL_P2_LEFT) == DigitalIn::DI_LEVEL_HIGH) {
+			UInputcpp::setKeyState(uinp_fd, ABS_X, 0, EV_ABS);
+		} else if (di.getLevel(DigitalIn::DI_CHANNEL_P2_RIGHT) == DigitalIn::DI_LEVEL_HIGH) {
+			UInputcpp::setKeyState(uinp_fd, ABS_X, 4, EV_ABS);
+		} else {
+			UInputcpp::setKeyState(uinp_fd, ABS_X, 2, EV_ABS);
+		}
+		if (di.getLevel(DigitalIn::DI_CHANNEL_P2_UP) == DigitalIn::DI_LEVEL_HIGH) {
+			UInputcpp::setKeyState(uinp_fd, ABS_Y, 0, EV_ABS);
+		} else if (di.getLevel(DigitalIn::DI_CHANNEL_P2_DOWN) == DigitalIn::DI_LEVEL_HIGH) {
+			UInputcpp::setKeyState(uinp_fd, ABS_Y, 4, EV_ABS);
+		} else {
+			UInputcpp::setKeyState(uinp_fd, ABS_Y, 2, EV_ABS);
+		}
+
+		// buttons
 		UInputcpp::setKeyState(uinp_fd, BTN_A, di.getLevel(DigitalIn::DI_CHANNEL_P2_SW1) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
 		UInputcpp::setKeyState(uinp_fd, BTN_B, di.getLevel(DigitalIn::DI_CHANNEL_P2_SW2) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
 		UInputcpp::setKeyState(uinp_fd, BTN_C, di.getLevel(DigitalIn::DI_CHANNEL_P2_SW3) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
