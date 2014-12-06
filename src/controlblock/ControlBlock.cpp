@@ -18,6 +18,10 @@ ControlBlock::ControlBlock() : configuration(new ControlBlockConfiguration())
 			gamepads[counter] = new ArcadeGamepad();
 		} else if (configuration->getGamepadType() == ControlBlockConfiguration::GAMEPAD_SNES) {
 			gamepads[counter] = new SNESGamepad();
+		} else if (configuration->getGamepadType() == ControlBlockConfiguration::GAMEPAD_MAME) {
+			gamepads[counter] = new MAMEGamepad();
+		} else {
+			throw 1;
 		}
 		gamepads[counter]->initialize(counter==0 ? InputDevice::CHANNEL_1 : InputDevice::CHANNEL_2);
 	}

@@ -9,6 +9,7 @@
 #include "InputDevice.h"
 #include "ArcadeGamepad.h"
 #include "SNESGamepad.h"
+#include "MAMEGamepad.h"
 #include "ControlBlockConfiguration.h"
 
 class ControlBlock {
