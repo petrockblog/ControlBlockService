@@ -1,15 +1,18 @@
 #include "DigitalOut.h"
-extern "C" {
-	#include <wiringPi.h>
-	#include <mcp23017.h>
-}
-#include <stdint.h>
 
 DigitalOut::DigitalOut() : mode(DO_MODE_ONLYPOWERSWITCH) {
+	expander[0] = new MCP23017PI(0);
+	expander[1] = new MCP23017PI(7);
+	expander[0]->begin();
+	expander[1]->begin();
 	setMode(mode);
 }
 
 DigitalOut::~DigitalOut() {
+	expander[0]->end();
+	expander[1]->end();
+	delete expander[1];
+	delete expander[0];
 }
 
 void DigitalOut::setMode(DO_Mode_e mode) {
@@ -17,56 +20,62 @@ void DigitalOut::setMode(DO_Mode_e mode) {
 
 	switch (mode) {
 		case DO_MODE_ONLYPOWERSWITCH:
-			pinMode (0, OUTPUT);
+			bcm2835_gpio_fsel(RPI_GPIO_P1_11, BCM2835_GPIO_FSEL_OUTP);
 			break;
 		case DO_MODE_SNES:
-			pinMode (0, OUTPUT);
-			pinMode (MCPBASE1 + 0, OUTPUT);
-			pinMode (MCPBASE1 + 1, OUTPUT);
-			pinMode (MCPBASE1 + 2, OUTPUT);
-			pinMode (MCPBASE1 + 13, OUTPUT);
-			pinMode (MCPBASE1 + 14, OUTPUT);
-			pinMode (MCPBASE1 + 15, OUTPUT);
-			digitalWrite(MCPBASE1 + 0, LOW);
-			digitalWrite(MCPBASE1 + 1, LOW);
-			digitalWrite(MCPBASE1 + 2, LOW);
-			digitalWrite(MCPBASE1 + 13, LOW);
-			digitalWrite(MCPBASE1 + 14, LOW);
-			digitalWrite(MCPBASE1 + 15, LOW);			
+			bcm2835_gpio_fsel(RPI_GPIO_P1_11, BCM2835_GPIO_FSEL_OUTP);
+			expander[0]->setPinMode(0, MCP23017PI::DIR_OUTPUT);
+			expander[0]->setPinMode(1, MCP23017PI::DIR_OUTPUT);
+			expander[0]->setPinMode(2, MCP23017PI::DIR_OUTPUT);
+			expander[0]->setPinMode(13, MCP23017PI::DIR_OUTPUT);
+			expander[0]->setPinMode(14, MCP23017PI::DIR_OUTPUT);
+			expander[0]->setPinMode(15, MCP23017PI::DIR_OUTPUT);
+			expander[0]->setPullupMode(0, MCP23017PI::PULLUP_DISABLED);
+			expander[0]->setPullupMode(1, MCP23017PI::PULLUP_DISABLED);
+			expander[0]->setPullupMode(2, MCP23017PI::PULLUP_DISABLED);
+			expander[0]->setPullupMode(13, MCP23017PI::PULLUP_DISABLED);
+			expander[0]->setPullupMode(14, MCP23017PI::PULLUP_DISABLED);
+			expander[0]->setPullupMode(15, MCP23017PI::PULLUP_DISABLED);
+			expander[0]->digitalWrite(0, MCP23017PI::LEVEL_LOW);
+			expander[0]->digitalWrite(1, MCP23017PI::LEVEL_LOW);
+			expander[0]->digitalWrite(2, MCP23017PI::LEVEL_LOW);
+			expander[0]->digitalWrite(13, MCP23017PI::LEVEL_LOW);
+			expander[0]->digitalWrite(14, MCP23017PI::LEVEL_LOW);
+			expander[0]->digitalWrite(15, MCP23017PI::LEVEL_LOW);			
 			break;
 	}
 }
 
 void DigitalOut::setLevel(DO_Channel_e channel, DO_Level_e level) {
-	int32_t outlevel;
+	MCP23017PI::Level_e outlevel;
 
 	if (level == DO_LEVEL_LOW) {
-		outlevel = LOW;
+		outlevel = MCP23017PI::LEVEL_LOW;
 	} else {
-		outlevel = HIGH;
+		outlevel = MCP23017PI::LEVEL_HIGH;
 	}
 
 	switch (channel) {
 		case DO_CHANNEL_TOPOWERSWITCH:
-			digitalWrite(0, outlevel);
+			bcm2835_gpio_write( RPI_GPIO_P1_11, outlevel == MCP23017PI::LEVEL_LOW ? LOW : HIGH);
 			break;
 	    case DO_CHANNEL_P1_STROBE:
-	    	digitalWrite(MCPBASE1 + 1, outlevel);
+	    	expander[0]->digitalWrite(1, outlevel);
 	    	break;
 	    case DO_CHANNEL_P1_CLOCK:
-	    	digitalWrite(MCPBASE1 + 2, outlevel);
+	    	expander[0]->digitalWrite(2, outlevel);
 	    	break;
 	    case DO_CHANNEL_P1_VCC:
-	    	digitalWrite(MCPBASE1 + 0, outlevel);
+	    	expander[0]->digitalWrite(0, outlevel);
 	    	break;
 	    case DO_CHANNEL_P2_STROBE:
-	    	digitalWrite(MCPBASE1 + 14, outlevel);
+	    	expander[0]->digitalWrite(14, outlevel);
 	    	break;
 	    case DO_CHANNEL_P2_CLOCK:
-	    	digitalWrite(MCPBASE1 + 13, outlevel);
+	    	expander[0]->digitalWrite(13, outlevel);
 	    	break;
 	    case DO_CHANNEL_P2_VCC:
-	    	digitalWrite(MCPBASE1 + 14, outlevel);
+	    	expander[0]->digitalWrite(15, outlevel);
 	    	break;
 	}
 }

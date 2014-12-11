@@ -1,15 +1,14 @@
 CC=g++
 SRCDIR=.
 BUILDDIR=../../build
-LIBWIRINGPI_DIR=../lib/wiringPi/wiringPi
-LIBWIRINGPI_INCDIR=$(LIBWIRINGPI_DIR)
-LIBWIRINGPI_LIBDIR=$(LIBWIRINGPI_DIR)
 LIBJSONCPP_DIR=../lib/jsoncpp
 LIBJSONCPP_INCDIR=$(LIBJSONCPP_DIR)/include
 LIBJSONCPP_LIBDIR=$(LIBJSONCPP_DIR)/build/release/lib
-LIBS=-lwiringPi -ljsoncpp -L$(LIBWIRINGPI_LIBDIR) -I$(LIBWIRINGPI_INCDIR) -L$(LIBJSONCPP_LIBDIR) -I$(LIBJSONCPP_INCDIR) -lrt -lpthread
-CFLAGS=-c -Wall -O3 -std=c++11 -I$(LIBWIRINGPI_INCDIR) -I$(LIBJSONCPP_INCDIR)
-# CFLAGS=-c -Wall -O3 -Weffc++ -std=c++11 -I$(LIBWIRINGPI_INCDIR) -I$(LIBJSONCPP_INCDIR)
+LIBBCM2835_DIR=../lib/bcm2835-1.38
+LIBBCM2835_INCDIR=$(LIBBCM2835_DIR)/src
+LIBBCM2835_LIBDIR=$(LIBBCM2835_DIR)/src
+LIBS=-ljsoncpp -lbcm2835 -L$(LIBJSONCPP_LIBDIR) -I$(LIBJSONCPP_INCDIR) -L$(LIBBCM2835_LIBDIR) -I$(LIBBCM2835_INCDIR) -lrt -lpthread
+CFLAGS=-c -Wall -std=c++11 -Ofast -I$(LIBJSONCPP_INCDIR) -I$(LIBBCM2835_INCDIR)
 
 TARGET := $(BUILDDIR)/controlblock
 SRCEXT := cpp
@@ -17,20 +16,21 @@ SOURCES := $(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)")
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 DEPS := $(OBJECTS:.o=.deps)
 
-all $(TARGET): $(LIBWIRINGPI_LIBDIR)/libwiringPi.a $(LIBJSONCPP_LIBDIR)/libjsoncpp.a $(OBJECTS)
+all $(TARGET): $(LIBJSONCPP_LIBDIR)/libjsoncpp.a $(LIBBCM2835_LIBDIR)/libbcm2835.a $(OBJECTS)
 	@echo " Linking..."; $(CC) $^ $(LIBS) -o $(TARGET)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(BUILDDIR)
 	@echo " CC $<"; $(CC) $(CFLAGS) -MD -MF $(@:.o=.deps) -c -o $@ $<
-
-$(LIBWIRINGPI_LIBDIR)/libwiringPi.a:
-	cd ../lib/wiringPi/wiringPi/ && $(MAKE) static
 	
 $(LIBJSONCPP_LIBDIR)/libjsoncpp.a:
 	cd ../lib/jsoncpp/ && mkdir -p build/release
 	cd ../lib/jsoncpp/build/release && cmake -DCMAKE_BUILD_TYPE=release -DJSONCPP_LIB_BUILD_SHARED=OFF -G "Unix Makefiles" ../..
 	cd ../lib/jsoncpp/build/release && make	
+
+$(LIBBCM2835_LIBDIR)/libbcm2835.a:
+	cd $(LIBBCM2835_DIR) && ./configure
+	cd $(LIBBCM2835_DIR) && $(MAKE)
 
 check:
 	# TO BE DONE! JUST A DUMMY FOR NOW

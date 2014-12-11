@@ -6,11 +6,15 @@ ControlBlock::ControlBlock() : configuration(new ControlBlockConfiguration())
 	switchMapping[ControlBlockConfiguration::SHUTDOWN_ACTIVATED] = PowerSwitch::SHUTDOWN_ACTIVATED;
 	switchMapping[ControlBlockConfiguration::SHUTDOWN_DEACTIVATED] = PowerSwitch::SHUTDOWN_DEACTIVATED;
 
-	wiringPiSetup ();
-	mcp23017Setup (MCPBASE1, MCP1ADDRESS);
-	mcp23017Setup (MCPBASE2, MCP2ADDRESS);
-
 	configuration->initialize();
+
+	if (configuration->getGamepadType() == ControlBlockConfiguration::GAMEPAD_SNES) {
+		DigitalIn::getInstance().setMode(DigitalIn::DI_MODE_SNES);
+		DigitalOut::getInstance().setMode(DigitalOut::DO_MODE_SNES);
+	} else {
+		DigitalIn::getInstance().setMode(DigitalIn::DI_MODE_ALLIN);
+		DigitalOut::getInstance().setMode(DigitalOut::DO_MODE_ONLYPOWERSWITCH);
+	}
 
 	powerSwitch = new PowerSwitch(switchMapping[configuration->getShutdownActivation()]);
 	for (uint8_t counter = 0; counter<NUMGAMEPADS; counter++) {
@@ -21,6 +25,7 @@ ControlBlock::ControlBlock() : configuration(new ControlBlockConfiguration())
 		} else if (configuration->getGamepadType() == ControlBlockConfiguration::GAMEPAD_MAME) {
 			gamepads[counter] = new MAMEGamepad();
 		} else {
+			std::cout << "Error while configuring gamepad type ..." << std::cout;
 			throw 1;
 		}
 		gamepads[counter]->initialize(counter==0 ? InputDevice::CHANNEL_1 : InputDevice::CHANNEL_2);

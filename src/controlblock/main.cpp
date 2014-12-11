@@ -6,6 +6,7 @@
 
 #include "ControlBlock.h"
 #include "PowerSwitch.h"
+#include <bcm2835.h>
 
 static volatile sig_atomic_t doRun = 1;
 
@@ -33,6 +34,11 @@ void register_signalhandlers() {
 
 int main(int argc, char **argv)
 {
+    if (!bcm2835_init()) {
+    	std::cout << "Error while initialiying bcm2835 library." << std::endl;
+    	return 1;
+    };
+
 	try {
 		register_signalhandlers();
 
@@ -44,6 +50,8 @@ int main(int argc, char **argv)
 	} catch (int errno) {
 		std::cout << "Erro while running main loop. Error number: " << errno << std::endl;
 	}
+	
+	bcm2835_close();
 
 	return 0;
 }

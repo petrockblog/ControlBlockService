@@ -1,13 +1,13 @@
 #ifndef DIGITALIN_H
 #define DIGITALIN_H
 
+#include "bcm2835.h"
 #include <stdint.h>
+#include "mcp23017pi.h"
 
 class DigitalIn
 {
 public:
-	const uint32_t MCPBASE1 = 100;
-	const uint32_t MCPBASE2 = 116;
 
 	typedef enum {
 	    DI_CHANNEL_FROMPOWERSWITCH = 0,
@@ -70,6 +70,7 @@ public:
 
 private:
 	DI_Mode_e mode;
+	MCP23017PI* expander[2];
 
 	DigitalIn();
 };

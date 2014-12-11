@@ -1,7 +1,10 @@
 #include <chrono>
 #include <thread>
+#include <iostream>
+#include <linux/uinput.h>
 
 #include "SNESGamepad.h"
+#include "uinputcpp.h"
 
 SNESGamepad::SNESGamepad() : channel(InputDevice::CHANNEL_UNDEFINED), uinp_fd(0) {
 }
@@ -77,9 +80,9 @@ uint16_t SNESGamepad::getSNESControllerState() {
 
 	if (channel == InputDevice::CHANNEL_1) {
 		dout.setLevel(DigitalOut::DO_CHANNEL_P1_STROBE, DigitalOut::DO_LEVEL_HIGH);
-		std::this_thread::sleep_for(std::chrono::microseconds(2));
+		delayMicroseconds(STROBEDELAY);
 		dout.setLevel(DigitalOut::DO_CHANNEL_P1_STROBE, DigitalOut::DO_LEVEL_LOW);
-		std::this_thread::sleep_for(std::chrono::microseconds(2));
+		delayMicroseconds(STROBEDELAY);
 
 		for (uint8_t i = 0; i < 16; i++) {
 			DigitalIn::DI_Level_e curpin = din.getLevel(DigitalIn::DI_CHANNEL_P1_DATA); 
@@ -88,15 +91,15 @@ uint16_t SNESGamepad::getSNESControllerState() {
 			}
 
 			dout.setLevel(DigitalOut::DO_CHANNEL_P1_CLOCK, DigitalOut::DO_LEVEL_HIGH);
-			std::this_thread::sleep_for(std::chrono::microseconds(2));
+			delayMicroseconds(STROBEDELAY);
 			dout.setLevel(DigitalOut::DO_CHANNEL_P1_CLOCK, DigitalOut::DO_LEVEL_LOW);
-			std::this_thread::sleep_for(std::chrono::microseconds(2));
+			delayMicroseconds(STROBEDELAY);
 		}
 	} else {
 		dout.setLevel(DigitalOut::DO_CHANNEL_P2_STROBE, DigitalOut::DO_LEVEL_HIGH);
-		std::this_thread::sleep_for(std::chrono::microseconds(2));
+		delayMicroseconds(STROBEDELAY);
 		dout.setLevel(DigitalOut::DO_CHANNEL_P2_STROBE, DigitalOut::DO_LEVEL_LOW);
-		std::this_thread::sleep_for(std::chrono::microseconds(2));
+		delayMicroseconds(STROBEDELAY);
 
 		for (uint8_t i = 0; i < 16; i++) {
 			DigitalIn::DI_Level_e curpin = din.getLevel(DigitalIn::DI_CHANNEL_P2_DATA); 
@@ -105,16 +108,17 @@ uint16_t SNESGamepad::getSNESControllerState() {
 			}
 
 			dout.setLevel(DigitalOut::DO_CHANNEL_P2_CLOCK, DigitalOut::DO_LEVEL_HIGH);
-			std::this_thread::sleep_for(std::chrono::microseconds(2));
+			delayMicroseconds(STROBEDELAY);
 			dout.setLevel(DigitalOut::DO_CHANNEL_P2_CLOCK, DigitalOut::DO_LEVEL_LOW);
-			std::this_thread::sleep_for(std::chrono::microseconds(2));
+			delayMicroseconds(STROBEDELAY);
 		}
 	}
 
 	// set to 0 if the controller is not connected
-	if ((state & 0xFFF) == 0xFFF) {
-		state = 0;
-	}
+//	if ((state & 0xFFF) == 0xFFF) {
+//		state = 0;
+//	}
+//	std::cout << "State: " << state << std::endl;
 	return state;
 }
 

@@ -2,11 +2,9 @@
 #define SNESGAMEPAD_H
 
 #include <stdint.h>
-#include <linux/uinput.h>
 #include "InputDevice.h"
 #include "DigitalIn.h"
 #include "DigitalOut.h"
-#include "uinputcpp.h"
 
 class SNESGamepad : public InputDevice {
 public:
@@ -41,6 +39,8 @@ public:
 	virtual void update();
 
 private:
+	static const uint32_t STROBEDELAY = 1;
+
 	InputDevice::Channel_e channel;
 	uint32_t uinp_fd;
 

@@ -1,14 +1,12 @@
 #ifndef DIGITALOUT_H
 #define DIGITALOUT_H
 
+#include "bcm2835.h"
 #include <stdint.h>
+#include "mcp23017pi.h"
 
-class DigitalOut
-{
+class DigitalOut {
 public:
-	const uint32_t MCPBASE1 = 100;
-	const uint32_t MCPBASE2 = 116;
-
 	typedef enum {
 	    DO_CHANNEL_TOPOWERSWITCH = 0,
 	    DO_CHANNEL_P1_STROBE,
@@ -41,6 +39,8 @@ public:
 
 private:
 	DO_Mode_e mode;
+    MCP23017PI* expander[2];
+
 	DigitalOut();
 
 };
