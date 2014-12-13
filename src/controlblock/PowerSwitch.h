@@ -1,8 +1,7 @@
 #ifndef POWERSWITCH_H
 #define POWERSWITCH_H
 
-#include "DigitalOut.h"
-#include "DigitalIn.h"
+#include <stdint.h>
 
 class PowerSwitch {
 public:
@@ -28,6 +27,9 @@ public:
 
 private:
 	ShutdownActivated_e doShutdown;
+
+	const uint16_t PIN_RPI_STATUS = 17;
+	const uint16_t PIN_RPI_SHUTDOWN = 18;
 
 	void setPowerSignal(PowerState_e state);
 	ShutdownSignal_e getShutdownSignal();

@@ -2,12 +2,8 @@
 #define CONTROLBLOCK_H
 
 #include <stdint.h>
-#include <iostream>
 #include "PowerSwitch.h"
 #include "InputDevice.h"
-#include "ArcadeGamepad.h"
-#include "SNESGamepad.h"
-#include "MAMEGamepad.h"
 #include "ControlBlockConfiguration.h"
 
 class ControlBlock {

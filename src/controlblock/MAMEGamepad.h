@@ -2,10 +2,7 @@
 #define MAMEGAMEPAD_H
 
 #include <stdint.h>
-#include <linux/uinput.h>
 #include "InputDevice.h"
-#include "DigitalIn.h"
-#include "uinputcpp.h"
 
 class MAMEGamepad : public InputDevice {
 public:

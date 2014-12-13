@@ -1,6 +1,8 @@
 #ifndef INPUTDEVICE_H
 #define INPUTDEVICE_H
 
+#include "ControlBlockConfiguration.h"
+
 class InputDevice {
 public:
 	typedef enum {

@@ -6,7 +6,7 @@
 
 #include "ControlBlock.h"
 #include "PowerSwitch.h"
-#include <bcm2835.h>
+#include "GPIO.h"
 
 static volatile sig_atomic_t doRun = 1;
 
@@ -32,26 +32,14 @@ void register_signalhandlers() {
 		printf("\n[ControlBlockService] Cannot catch SIGTERM\n");
 }
 
-int main(int argc, char **argv)
-{
-    if (!bcm2835_init()) {
-    	std::cout << "Error while initialiying bcm2835 library." << std::endl;
-    	return 1;
-    };
+int main(int argc, char **argv) {
+	register_signalhandlers();
 
-	try {
-		register_signalhandlers();
-
-		ControlBlock controlBlock = ControlBlock();
-		while (doRun) {
-			controlBlock.update();
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
-		}		
-	} catch (int errno) {
-		std::cout << "Erro while running main loop. Error number: " << errno << std::endl;
-	}
-	
-	bcm2835_close();
+	ControlBlock controlBlock = ControlBlock();
+	while (doRun) {
+		controlBlock.update();
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	}	
 
 	return 0;
 }

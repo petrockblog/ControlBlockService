@@ -2,6 +2,7 @@
     Copyright (C) 2009 David Pye    <davidmpye@gmail.com> (Original Arduino Library)
     Copyright (C) 2012 Kasper Skårhøj <kasperskaarhoj@gmail.com> (Original Arduino Library)
     Copyright (C) 2013 Isaias Lourenco <isaias.lourenco@swp.pt> (PI conversion)
+    Copyright (C) 2014 Florian Müller <contact@petrockblock.com> 
     Version 0.1
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,14 +22,10 @@
 #include <iostream>
 #include <stdio.h>
 
-MCP23017PI::MCP23017PI(uint8_t i2cAddress) {
-	_i2cAddress = (MCP23017PI_I2C_BASE_ADDRESS >>1) | (i2cAddress & 0x07);
-	_GPIOA = 0;
-	_IODIRA = 0;
-	_GPPUA = 0;
-	_GPIOB = 0;
-	_IODIRB = 0;
-	_GPPUB = 0;
+MCP23017PI::MCP23017PI(uint8_t i2cAddress) : 
+_i2cAddress((MCP23017PI_I2C_BASE_ADDRESS >>1) | (i2cAddress & 0x07)),
+_GPIOA(0), _GPIOB(0), _IODIRA(0), _IODIRB(0), _GPPUA(0), _GPPUB(0)
+{
 }
 
 bool MCP23017PI::isBCM2835Initialized = false;
@@ -40,10 +37,7 @@ void MCP23017PI::begin() {
 			throw 1;
 		}
 		// bcm2835_i2c_setClockDivider(BCM2835_I2C_CLOCK_DIVIDER_626);
-		bcm2835_i2c_setClockDivider(167);
-		#ifdef DEBUG		
-			std::cout << "Setting clock divider to " << int(BCM2835_I2C_CLOCK_DIVIDER_626) << std::endl;
-		#endif
+		bcm2835_i2c_setClockDivider(160); // 250MHz / 160 = 1,5625 Mhz Clock Rate for I2C
 		isBCM2835Initialized = true;
 	}
 
@@ -69,9 +63,6 @@ void MCP23017PI::setPinMode(uint8_t pin, Direction_e dir) {
 		} else {
 			*data &= (~(1 << pin));
 		}
-		#ifdef DEBUG
-			std::cout << "Setting direction of pin " << int(pin) << ": data: " << int(*data) << std::endl;
-		#endif
 		writeRegister(reg, *data);
 	}
 }
@@ -95,9 +86,6 @@ void MCP23017PI::setPullupMode(uint8_t pin, Pullup_e mode) {
 		} else {
 			*data &= (~(1 << pin));
 		}
-		#ifdef DEBUG
-			std::cout << "Setting pullup of pin " << int(pin) << ": data: " << int(*data) << std::endl;
-		#endif
 		writeRegister(reg, *data);
 	}	
 }
@@ -110,7 +98,7 @@ MCP23017PI::Level_e MCP23017PI::digitalRead(uint8_t pin) {
 		} else {
 			return LEVEL_LOW;
 		}
-	} else if (pin <16) {
+	} else if (pin < 16) {
 		_GPIOB = readRegister(MCP23017PI_GPIOB);
 		pin &= 0x07;
 		if ( _GPIOB & (1 << pin)) {
@@ -119,6 +107,7 @@ MCP23017PI::Level_e MCP23017PI::digitalRead(uint8_t pin) {
 			return LEVEL_LOW;
 		}
 	} else {
+		std::cout << "Error while MCP23017PI::digitalRead call. pin=" << (int)pin << std::endl;
 		throw 11;
 	}
 }

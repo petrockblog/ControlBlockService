@@ -1,4 +1,8 @@
 #include "ControlBlock.h"
+#include <iostream>
+#include "ArcadeGamepad.h"
+#include "SNESGamepad.h"
+#include "MAMEGamepad.h"
 
 ControlBlock::ControlBlock() : configuration(new ControlBlockConfiguration())  
 {
@@ -7,14 +11,6 @@ ControlBlock::ControlBlock() : configuration(new ControlBlockConfiguration())
 	switchMapping[ControlBlockConfiguration::SHUTDOWN_DEACTIVATED] = PowerSwitch::SHUTDOWN_DEACTIVATED;
 
 	configuration->initialize();
-
-	if (configuration->getGamepadType() == ControlBlockConfiguration::GAMEPAD_SNES) {
-		DigitalIn::getInstance().setMode(DigitalIn::DI_MODE_SNES);
-		DigitalOut::getInstance().setMode(DigitalOut::DO_MODE_SNES);
-	} else {
-		DigitalIn::getInstance().setMode(DigitalIn::DI_MODE_ALLIN);
-		DigitalOut::getInstance().setMode(DigitalOut::DO_MODE_ONLYPOWERSWITCH);
-	}
 
 	powerSwitch = new PowerSwitch(switchMapping[configuration->getShutdownActivation()]);
 	for (uint8_t counter = 0; counter<NUMGAMEPADS; counter++) {

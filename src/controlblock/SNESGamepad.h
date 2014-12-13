@@ -3,8 +3,6 @@
 
 #include <stdint.h>
 #include "InputDevice.h"
-#include "DigitalIn.h"
-#include "DigitalOut.h"
 
 class SNESGamepad : public InputDevice {
 public:
@@ -39,10 +37,19 @@ public:
 	virtual void update();
 
 private:
-	static const uint32_t STROBEDELAY = 1;
+	const uint16_t PIN_P1_VCC = 115;
+	const uint16_t PIN_P1_LATCH = 114;
+	const uint16_t PIN_P1_CLOCK = 113;
+	const uint16_t PIN_P1_DATA = 112;
+	const uint16_t PIN_P2_VCC = 111;
+	const uint16_t PIN_P2_LATCH = 110;
+	const uint16_t PIN_P2_CLOCK = 109;
+	const uint16_t PIN_P2_DATA = 108;
 
 	InputDevice::Channel_e channel;
 	uint32_t uinp_fd;
+	static uint16_t state1;
+	static uint16_t state2;
 
 	uint16_t getSNESControllerState();
 };

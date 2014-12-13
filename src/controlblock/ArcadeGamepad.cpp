@@ -1,13 +1,15 @@
-#include "ArcadeGamepad.h"
+#include <linux/input.h>
+#include <linux/uinput.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <iostream>
+#include <linux/uinput.h>
 
-extern "C" {
-	#include <linux/input.h>
-	#include <linux/uinput.h>
-	#include <fcntl.h>
-	#include <stdio.h>
-	#include <string.h>
-	#include <unistd.h>
-}
+#include "uinputcpp.h"
+#include "ArcadeGamepad.h"
+#include "GPIO.h"
 
 ArcadeGamepad::ArcadeGamepad() : channel(InputDevice::CHANNEL_UNDEFINED), uinp_fd(0) {
 }
@@ -17,8 +19,6 @@ ArcadeGamepad::~ArcadeGamepad() {
 }
 
 void ArcadeGamepad::initialize(InputDevice::Channel_e channel) {
-	DigitalIn::getInstance().setMode(DigitalIn::DI_MODE_ALLIN);
-
 	uinp_fd = UInputcpp::getHandle();
 	this->channel = channel;
 
@@ -66,72 +66,82 @@ void ArcadeGamepad::initialize(InputDevice::Channel_e channel) {
 
 	UInputcpp::setKeyState(uinp_fd, ABS_X, 2, EV_ABS);
 	UInputcpp::setKeyState(uinp_fd, ABS_Y, 2, EV_ABS);
+
+	GPIO& gpio = GPIO::getInstance();
+	for (int32_t i = 0 ; i < 16 ; ++i) {
+		gpio.setDirection (100 + i, GPIO::DIRECTION_IN);
+		gpio.setDirection (200 + i, GPIO::DIRECTION_IN);
+		gpio.setPullupMode(100 + i, GPIO::PULLUP_ENABLED);
+		gpio.setPullupMode(200 + i, GPIO::PULLUP_ENABLED);
+	}	
 }
 
 void ArcadeGamepad::update() {
-	DigitalIn di = DigitalIn::getInstance();
+	GPIO& gpio = GPIO::getInstance();
+	// DigitalIn di = DigitalIn::getInstance();
 
 	if (channel == InputDevice::CHANNEL_1) {
 		// axes
-		if (di.getLevel(DigitalIn::DI_CHANNEL_P1_LEFT) == DigitalIn::DI_LEVEL_HIGH) {
+		if (gpio.read(101) == GPIO::LEVEL_HIGH) {
 			UInputcpp::setKeyState(uinp_fd, ABS_X, 0, EV_ABS);
-		} else if (di.getLevel(DigitalIn::DI_CHANNEL_P1_RIGHT) == DigitalIn::DI_LEVEL_HIGH) {
+		} else if (gpio.read(100) == GPIO::LEVEL_HIGH) {
 			UInputcpp::setKeyState(uinp_fd, ABS_X, 4, EV_ABS);
 		} else {
 			UInputcpp::setKeyState(uinp_fd, ABS_X, 2, EV_ABS);
 		}
-		if (di.getLevel(DigitalIn::DI_CHANNEL_P1_UP) == DigitalIn::DI_LEVEL_HIGH) {
+		if (gpio.read(102) == GPIO::LEVEL_HIGH) {
 			UInputcpp::setKeyState(uinp_fd, ABS_Y, 0, EV_ABS);
-		} else if (di.getLevel(DigitalIn::DI_CHANNEL_P1_DOWN) == DigitalIn::DI_LEVEL_HIGH) {
+		} else if (gpio.read(103) == GPIO::LEVEL_HIGH) {
 			UInputcpp::setKeyState(uinp_fd, ABS_Y, 4, EV_ABS);
 		} else {
 			UInputcpp::setKeyState(uinp_fd, ABS_Y, 2, EV_ABS);
 		}
 
 		// buttons
-		UInputcpp::setKeyState(uinp_fd, BTN_A, di.getLevel(DigitalIn::DI_CHANNEL_P1_SW1) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_B, di.getLevel(DigitalIn::DI_CHANNEL_P1_SW2) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_C, di.getLevel(DigitalIn::DI_CHANNEL_P1_SW3) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_X, di.getLevel(DigitalIn::DI_CHANNEL_P1_SW4) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_Y, di.getLevel(DigitalIn::DI_CHANNEL_P1_SW5) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_Z, di.getLevel(DigitalIn::DI_CHANNEL_P1_SW6) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_TL, di.getLevel(DigitalIn::DI_CHANNEL_P1_SW7) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_TR, di.getLevel(DigitalIn::DI_CHANNEL_P1_SW8) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_START, di.getLevel(DigitalIn::DI_CHANNEL_P1_START) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_SELECT, di.getLevel(DigitalIn::DI_CHANNEL_P1_COIN) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_TL2, di.getLevel(DigitalIn::DI_CHANNEL_P1_A) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_TR2, di.getLevel(DigitalIn::DI_CHANNEL_P1_B) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);	
+		UInputcpp::setKeyState(uinp_fd, BTN_A, gpio.read(104) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_B, gpio.read(105) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_C, gpio.read(106) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_X, gpio.read(107) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_Y, gpio.read(200) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_Z, gpio.read(201) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_TL, gpio.read(202) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_TR, gpio.read(203) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_START, gpio.read(204) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_SELECT, gpio.read(205) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_TL2, gpio.read(206) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_TR2, gpio.read(207) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);	
 	} else if (channel == InputDevice::CHANNEL_2) {
 		// axes
-		if (di.getLevel(DigitalIn::DI_CHANNEL_P2_LEFT) == DigitalIn::DI_LEVEL_HIGH) {
+		if (gpio.read(114) == GPIO::LEVEL_HIGH) {
 			UInputcpp::setKeyState(uinp_fd, ABS_X, 0, EV_ABS);
-		} else if (di.getLevel(DigitalIn::DI_CHANNEL_P2_RIGHT) == DigitalIn::DI_LEVEL_HIGH) {
+		} else if (gpio.read(115) == GPIO::LEVEL_HIGH) {
 			UInputcpp::setKeyState(uinp_fd, ABS_X, 4, EV_ABS);
 		} else {
 			UInputcpp::setKeyState(uinp_fd, ABS_X, 2, EV_ABS);
 		}
-		if (di.getLevel(DigitalIn::DI_CHANNEL_P2_UP) == DigitalIn::DI_LEVEL_HIGH) {
+		if (gpio.read(113) == GPIO::LEVEL_HIGH) {
 			UInputcpp::setKeyState(uinp_fd, ABS_Y, 0, EV_ABS);
-		} else if (di.getLevel(DigitalIn::DI_CHANNEL_P2_DOWN) == DigitalIn::DI_LEVEL_HIGH) {
+		} else if (gpio.read(112) == GPIO::LEVEL_HIGH) {
 			UInputcpp::setKeyState(uinp_fd, ABS_Y, 4, EV_ABS);
 		} else {
 			UInputcpp::setKeyState(uinp_fd, ABS_Y, 2, EV_ABS);
 		}
 
 		// buttons
-		UInputcpp::setKeyState(uinp_fd, BTN_A, di.getLevel(DigitalIn::DI_CHANNEL_P2_SW1) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_B, di.getLevel(DigitalIn::DI_CHANNEL_P2_SW2) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_C, di.getLevel(DigitalIn::DI_CHANNEL_P2_SW3) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_X, di.getLevel(DigitalIn::DI_CHANNEL_P2_SW4) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_Y, di.getLevel(DigitalIn::DI_CHANNEL_P2_SW5) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_Z, di.getLevel(DigitalIn::DI_CHANNEL_P2_SW6) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_TL, di.getLevel(DigitalIn::DI_CHANNEL_P2_SW7) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_TR, di.getLevel(DigitalIn::DI_CHANNEL_P2_SW8) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_START, di.getLevel(DigitalIn::DI_CHANNEL_P2_START) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_SELECT, di.getLevel(DigitalIn::DI_CHANNEL_P2_COIN) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_TL2, di.getLevel(DigitalIn::DI_CHANNEL_P2_A) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);
-		UInputcpp::setKeyState(uinp_fd, BTN_TR2, di.getLevel(DigitalIn::DI_CHANNEL_P2_B) == DigitalIn::DI_LEVEL_LOW ? 0 : 1, EV_KEY);	
+		UInputcpp::setKeyState(uinp_fd, BTN_A, gpio.read(111) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_B, gpio.read(110) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_C, gpio.read(109) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_X, gpio.read(108) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_Y, gpio.read(215) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_Z, gpio.read(214) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_TL, gpio.read(213) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_TR, gpio.read(212) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_START, gpio.read(211) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_SELECT, gpio.read(210) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_TL2, gpio.read(209) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+		UInputcpp::setKeyState(uinp_fd, BTN_TR2, gpio.read(208) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);	
 	} else {
+		std::cout << "ArcadeGamepad.cpp. Error." << std::endl;
 		throw 3;
 	}
 }
