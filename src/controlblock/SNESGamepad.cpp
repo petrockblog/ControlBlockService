@@ -1,3 +1,25 @@
+/*
+ * (c) Copyright 2014  Florian Müller (contact@petrockblock.com)
+ * https://github.com/petrockblog/ControlBlockService
+ *
+ * Permission to use, copy, modify and distribute the program in both binary and
+ * source form, for non-commercial purposes, is hereby granted without fee,
+ * providing that this license information and copyright notice appear with
+ * all copies and any derived work.
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event shall the authors be held liable for any damages
+ * arising from the use of this software.
+ *
+ * This program is freeware for PERSONAL USE only. Commercial users must
+ * seek permission of the copyright holders first. Commercial use includes
+ * charging money for the program or software derived from the program.
+ *
+ * The copyright holders request that bug fixes and improvements to the code
+ * should be forwarded to them so everyone can benefit from the modifications
+ * in future versions.
+ */
+
 #include <chrono>
 #include <thread>
 #include <iostream>
@@ -6,6 +28,9 @@
 #include "SNESGamepad.h"
 #include "GPIO.h"
 #include "uinputcpp.h"
+
+uint16_t SNESGamepad::state1 = 0;
+uint16_t SNESGamepad::state2 = 0;
 
 SNESGamepad::SNESGamepad() : channel(InputDevice::CHANNEL_UNDEFINED), uinp_fd(0) {
 }
@@ -22,7 +47,7 @@ void SNESGamepad::initialize(InputDevice::Channel_e channel) {
 
 	struct uinput_user_dev uinp;
 	memset(&uinp, 0, sizeof(uinp));
-	strncpy(uinp.name, "ControlBlock Gamepad", strlen("ControlBlock Gamepad"));
+	strncpy(uinp.name, "ControlBlock SNES Gamepad", strlen("ControlBlock SNES Gamepad"));
 	uinp.id.version = 4;
 	uinp.id.bustype = BUS_USB;
 	uinp.id.product = 1;
@@ -63,69 +88,61 @@ void SNESGamepad::initialize(InputDevice::Channel_e channel) {
 	GPIO& gpio = GPIO::getInstance();
 	if (channel == InputDevice::CHANNEL_1) {
 		gpio.setDirection(PIN_P1_VCC, GPIO::DIRECTION_OUT);
-		gpio.setDirection(PIN_P1_LATCH, GPIO::DIRECTION_OUT);
-		gpio.setDirection(PIN_P1_CLOCK, GPIO::DIRECTION_OUT);
+		gpio.setDirection(PIN_P1P2_LATCH, GPIO::DIRECTION_OUT);
+		gpio.setDirection(PIN_P1P2_CLOCK, GPIO::DIRECTION_OUT);
 
 		gpio.setDirection(PIN_P1_DATA, GPIO::DIRECTION_IN);
 		gpio.setPullupMode(PIN_P1_DATA, GPIO::PULLUP_ENABLED);
 
 		gpio.write(PIN_P1_VCC, GPIO::LEVEL_HIGH);
-		gpio.write(PIN_P1_LATCH, GPIO::LEVEL_LOW);
-		gpio.write(PIN_P1_CLOCK, GPIO::LEVEL_LOW);
+		gpio.write(PIN_P1P2_LATCH, GPIO::LEVEL_LOW);
+		gpio.write(PIN_P1P2_CLOCK, GPIO::LEVEL_LOW);
 	} else {
 		gpio.setDirection(PIN_P2_VCC, GPIO::DIRECTION_OUT);
-		gpio.setDirection(PIN_P2_LATCH, GPIO::DIRECTION_OUT);
-		gpio.setDirection(PIN_P2_CLOCK, GPIO::DIRECTION_OUT);
+		gpio.setDirection(PIN_P1P2_LATCH, GPIO::DIRECTION_OUT);
+		gpio.setDirection(PIN_P1P2_CLOCK, GPIO::DIRECTION_OUT);
 
 		gpio.setDirection(PIN_P2_DATA, GPIO::DIRECTION_IN);
 		gpio.setPullupMode(PIN_P2_DATA, GPIO::PULLUP_ENABLED);
 
 		gpio.write(PIN_P2_VCC, GPIO::LEVEL_HIGH);
-		gpio.write(PIN_P2_LATCH, GPIO::LEVEL_LOW);
-		gpio.write(PIN_P2_CLOCK, GPIO::LEVEL_LOW);
+		gpio.write(PIN_P1P2_LATCH, GPIO::LEVEL_LOW);
+		gpio.write(PIN_P1P2_CLOCK, GPIO::LEVEL_LOW);
 	}
 }
 
 inline uint16_t SNESGamepad::getSNESControllerState() {
-	uint16_t state = 0;
+	SNESGamepad::state1 = 0;
+	SNESGamepad::state2 = 0;
 	GPIO& gpio = GPIO::getInstance();
 
 	if (channel == InputDevice::CHANNEL_1) {
 		// latch pulse
-        gpio.write(PIN_P1_LATCH, GPIO::LEVEL_HIGH);
-        gpio.write(PIN_P1_LATCH, GPIO::LEVEL_LOW);
+        gpio.write(PIN_P1P2_LATCH, GPIO::LEVEL_HIGH);
+        gpio.write(PIN_P1P2_LATCH, GPIO::LEVEL_LOW);
 
 		for (uint8_t i = 0; i < 15; i++) {
         	GPIO::Level_e level = gpio.read(PIN_P1_DATA);
             if (level == GPIO::LEVEL_LOW) {
-                state |= (1 << i);
+                state1 |= (1 << i);
             }
-            // clock pulse
-            gpio.write(PIN_P1_CLOCK, GPIO::LEVEL_HIGH);
-            gpio.write(PIN_P1_CLOCK, GPIO::LEVEL_LOW);
-		}
-	} else {
-		// latch pulse
-        gpio.write(PIN_P2_LATCH, GPIO::LEVEL_HIGH);
-        gpio.write(PIN_P2_LATCH, GPIO::LEVEL_LOW);
-
-		for (uint8_t i = 0; i < 15; i++) {
-        	GPIO::Level_e level = gpio.read(PIN_P2_DATA);
+        	level = gpio.read(PIN_P2_DATA);
             if (level == GPIO::LEVEL_LOW) {
-                state |= (1 << i);
+                state2 |= (1 << i);
             }
             // clock pulse
-            gpio.write(PIN_P2_CLOCK, GPIO::LEVEL_HIGH);
-            gpio.write(PIN_P2_CLOCK, GPIO::LEVEL_LOW);
+            gpio.write(PIN_P1P2_CLOCK, GPIO::LEVEL_HIGH);
+            gpio.write(PIN_P1P2_CLOCK, GPIO::LEVEL_LOW);
 		}
+		return state1;
+	} else {
+		return state2;
 	}
 
 	// set to 0 if the controller is not connected
 //	if ((state & 0xFFF) == 0xFFF) {
 //		state = 0;
 //	}
-//	std::cout << "State: " << state << std::endl;
-	return state;
 }
 
 void SNESGamepad::update() {
