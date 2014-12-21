@@ -24,11 +24,12 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@echo " CC $<"; $(CC) $(CFLAGS) -MD -MF $(@:.o=.deps) -c -o $@ $<
 	
 $(LIBJSONCPP_LIBDIR)/libjsoncpp.a:
-	cd ../lib/jsoncpp/ && mkdir -p build/release
-	cd ../lib/jsoncpp/build/release && cmake -DCMAKE_BUILD_TYPE=release -DJSONCPP_LIB_BUILD_SHARED=OFF -G "Unix Makefiles" ../..
-	cd ../lib/jsoncpp/build/release && make	
+	cd $(LIBJSONCPP_DIR)/ && mkdir -p build/release
+	cd $(LIBJSONCPP_DIR)/build/release && cmake -DCMAKE_BUILD_TYPE=release -DJSONCPP_LIB_BUILD_SHARED=OFF -G "Unix Makefiles" ../..
+	cd $(LIBJSONCPP_DIR)/build/release && make	
 
 $(LIBBCM2835_LIBDIR)/libbcm2835.a:
+	cd ../lib && tar zxvf bcm2835-1.38.tar.gz
 	cd $(LIBBCM2835_DIR) && ./configure
 	cd $(LIBBCM2835_DIR) && $(MAKE)
 
