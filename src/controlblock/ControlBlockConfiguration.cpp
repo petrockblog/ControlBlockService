@@ -63,13 +63,16 @@ void ControlBlockConfiguration::initialize()
 		} else if (configvalue.compare("snes") == 0) {
 			gamepadType = GAMEPAD_SNES;
 			std::cout << "[ControlBlock] Gamepadtype = SNES gamepads" << std::endl;
+		} else {
+			gamepadType = GAMEPAD_NONE;
+			std::cout << "[ControlBlock] Gamepadtype = NONE" << std::endl;
 		}
 
 		bool configboolean = root["powerswitch"]["activated"].asBool();
 		if (configboolean) {
 			doShutdown = SHUTDOWN_ACTIVATED;
 			std::cout << "[ControlBlock] Shutdown is ACTIVATED" << std::endl;
-		} else if (configvalue.compare("snes") == 0) {
+		} else {
 			doShutdown = SHUTDOWN_DEACTIVATED;
 			std::cout << "[ControlBlock] Shutdown is DEACTIVATED" << std::endl;
 		}

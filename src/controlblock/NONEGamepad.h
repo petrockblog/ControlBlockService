@@ -20,35 +20,23 @@
  * in future versions.
  */
 
-#ifndef CONTROLBLOCKCONFIGURATION_H
-#define CONTROLBLOCKCONFIGURATION_H
+#ifndef NONEGAMEPAD_H
+#define NONEGAMEPAD_H
 
-#include <json/json.h>
+#include <stdint.h>
+#include "InputDevice.h"
 
-class ControlBlockConfiguration {
+class NONEGamepad : public InputDevice {
 public:
-	typedef enum {
-		GAMEPAD_NONE = 0,
-		GAMEPAD_ARCADE,
-		GAMEPAD_MAME,
-		GAMEPAD_SNES
-	} GamepadType_e;
+	NONEGamepad();
+	~NONEGamepad();
 
-	typedef enum {
-		SHUTDOWN_DEACTIVATED = 0,
-		SHUTDOWN_ACTIVATED
-	} ShutdownType_e;
-
-	ControlBlockConfiguration();
-	~ControlBlockConfiguration();
-	
-	void initialize();
-	GamepadType_e getGamepadType() const;
-	ShutdownType_e getShutdownActivation() const;
+	virtual void initialize(InputDevice::Channel_e channel);
+	virtual void update();
 
 private:
-	GamepadType_e gamepadType;
-	ShutdownType_e doShutdown;
+	InputDevice::Channel_e channel;
+	uint32_t uinp_fd;
 
 };
 

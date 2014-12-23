@@ -25,6 +25,7 @@
 #include "ArcadeGamepad.h"
 #include "SNESGamepad.h"
 #include "MAMEGamepad.h"
+#include "NONEGamepad.h"
 
 ControlBlock::ControlBlock() : configuration(new ControlBlockConfiguration())  
 {
@@ -43,8 +44,7 @@ ControlBlock::ControlBlock() : configuration(new ControlBlockConfiguration())
 		} else if (configuration->getGamepadType() == ControlBlockConfiguration::GAMEPAD_MAME) {
 			gamepads[counter] = new MAMEGamepad();
 		} else {
-			std::cout << "Error while configuring gamepad type ..." << std::cout;
-			throw 1;
+			gamepads[counter] = new NONEGamepad();
 		}
 		gamepads[counter]->initialize(counter==0 ? InputDevice::CHANNEL_1 : InputDevice::CHANNEL_2);
 	}
