@@ -113,11 +113,11 @@ void SNESGamepad::initialize(InputDevice::Channel_e channel) {
 }
 
 inline uint16_t SNESGamepad::getSNESControllerState() {
-    SNESGamepad::state1 = 0;
-    SNESGamepad::state2 = 0;
-    GPIO &gpio = GPIO::getInstance();
-
     if (channel == InputDevice::CHANNEL_1) {
+        SNESGamepad::state1 = 0;
+        SNESGamepad::state2 = 0;
+        GPIO &gpio = GPIO::getInstance();
+
         // latch pulse
         gpio.write(PIN_P1P2_LATCH, GPIO::LEVEL_HIGH);
         gpio.write(PIN_P1P2_LATCH, GPIO::LEVEL_LOW);

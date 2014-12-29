@@ -102,16 +102,16 @@ void ArcadeGamepad::update() {
 
     if (channel == InputDevice::CHANNEL_1) {
         // axes
-        if (gpio.read(101) == GPIO::LEVEL_HIGH) {
+        if (gpio.read(101) == GPIO::LEVEL_LOW) {
             UInputcpp::setKeyState(uinp_fd, ABS_X, 0, EV_ABS);
-        } else if (gpio.read(100) == GPIO::LEVEL_HIGH) {
+        } else if (gpio.read(100) == GPIO::LEVEL_LOW) {
             UInputcpp::setKeyState(uinp_fd, ABS_X, 4, EV_ABS);
         } else {
             UInputcpp::setKeyState(uinp_fd, ABS_X, 2, EV_ABS);
         }
-        if (gpio.read(102) == GPIO::LEVEL_HIGH) {
+        if (gpio.read(102) == GPIO::LEVEL_LOW) {
             UInputcpp::setKeyState(uinp_fd, ABS_Y, 0, EV_ABS);
-        } else if (gpio.read(103) == GPIO::LEVEL_HIGH) {
+        } else if (gpio.read(103) == GPIO::LEVEL_LOW) {
             UInputcpp::setKeyState(uinp_fd, ABS_Y, 4, EV_ABS);
         } else {
             UInputcpp::setKeyState(uinp_fd, ABS_Y, 2, EV_ABS);
@@ -119,45 +119,45 @@ void ArcadeGamepad::update() {
 
         // buttons
         UInputcpp::setKeyState(
-            uinp_fd, BTN_A, gpio.read(104) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_A, gpio.read(104) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_B, gpio.read(105) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_B, gpio.read(105) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_C, gpio.read(106) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_C, gpio.read(106) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_X, gpio.read(107) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_X, gpio.read(107) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_Y, gpio.read(200) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_Y, gpio.read(200) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_Z, gpio.read(201) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_Z, gpio.read(201) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_TL, gpio.read(202) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_TL, gpio.read(202) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_TR, gpio.read(203) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_TR, gpio.read(203) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(uinp_fd, BTN_START,
-                               gpio.read(204) == GPIO::LEVEL_LOW ? 0 : 1,
+                               gpio.read(204) == GPIO::LEVEL_LOW ? 1 : 0,
                                EV_KEY);
         UInputcpp::setKeyState(uinp_fd, BTN_SELECT,
-                               gpio.read(205) == GPIO::LEVEL_LOW ? 0 : 1,
+                               gpio.read(205) == GPIO::LEVEL_LOW ? 1 : 0,
                                EV_KEY);
         UInputcpp::setKeyState(uinp_fd, BTN_TL2,
-                               gpio.read(206) == GPIO::LEVEL_LOW ? 0 : 1,
+                               gpio.read(206) == GPIO::LEVEL_LOW ? 1 : 0,
                                EV_KEY);
         UInputcpp::setKeyState(uinp_fd, BTN_TR2,
-                               gpio.read(207) == GPIO::LEVEL_LOW ? 0 : 1,
+                               gpio.read(207) == GPIO::LEVEL_LOW ? 1 : 0,
                                EV_KEY);
     } else if (channel == InputDevice::CHANNEL_2) {
         // axes
-        if (gpio.read(114) == GPIO::LEVEL_HIGH) {
+        if (gpio.read(114) == GPIO::LEVEL_LOW) {
             UInputcpp::setKeyState(uinp_fd, ABS_X, 0, EV_ABS);
-        } else if (gpio.read(115) == GPIO::LEVEL_HIGH) {
+        } else if (gpio.read(115) == GPIO::LEVEL_LOW) {
             UInputcpp::setKeyState(uinp_fd, ABS_X, 4, EV_ABS);
         } else {
             UInputcpp::setKeyState(uinp_fd, ABS_X, 2, EV_ABS);
         }
-        if (gpio.read(113) == GPIO::LEVEL_HIGH) {
+        if (gpio.read(113) == GPIO::LEVEL_LOW) {
             UInputcpp::setKeyState(uinp_fd, ABS_Y, 0, EV_ABS);
-        } else if (gpio.read(112) == GPIO::LEVEL_HIGH) {
+        } else if (gpio.read(112) == GPIO::LEVEL_LOW) {
             UInputcpp::setKeyState(uinp_fd, ABS_Y, 4, EV_ABS);
         } else {
             UInputcpp::setKeyState(uinp_fd, ABS_Y, 2, EV_ABS);
@@ -165,32 +165,32 @@ void ArcadeGamepad::update() {
 
         // buttons
         UInputcpp::setKeyState(
-            uinp_fd, BTN_A, gpio.read(111) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_A, gpio.read(111) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_B, gpio.read(110) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_B, gpio.read(110) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_C, gpio.read(109) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_C, gpio.read(109) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_X, gpio.read(108) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_X, gpio.read(108) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_Y, gpio.read(215) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_Y, gpio.read(215) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_Z, gpio.read(214) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_Z, gpio.read(214) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_TL, gpio.read(213) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_TL, gpio.read(213) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(
-            uinp_fd, BTN_TR, gpio.read(212) == GPIO::LEVEL_LOW ? 0 : 1, EV_KEY);
+            uinp_fd, BTN_TR, gpio.read(212) == GPIO::LEVEL_LOW ? 1 : 0, EV_KEY);
         UInputcpp::setKeyState(uinp_fd, BTN_START,
-                               gpio.read(211) == GPIO::LEVEL_LOW ? 0 : 1,
+                               gpio.read(211) == GPIO::LEVEL_LOW ? 1 : 0,
                                EV_KEY);
         UInputcpp::setKeyState(uinp_fd, BTN_SELECT,
-                               gpio.read(210) == GPIO::LEVEL_LOW ? 0 : 1,
+                               gpio.read(210) == GPIO::LEVEL_LOW ? 1 : 0,
                                EV_KEY);
         UInputcpp::setKeyState(uinp_fd, BTN_TL2,
-                               gpio.read(209) == GPIO::LEVEL_LOW ? 0 : 1,
+                               gpio.read(209) == GPIO::LEVEL_LOW ? 1 : 0,
                                EV_KEY);
         UInputcpp::setKeyState(uinp_fd, BTN_TR2,
-                               gpio.read(208) == GPIO::LEVEL_LOW ? 0 : 1,
+                               gpio.read(208) == GPIO::LEVEL_LOW ? 1 : 0,
                                EV_KEY);
     } else {
         std::cout << "ArcadeGamepad.cpp. Error." << std::endl;
