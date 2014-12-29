@@ -42,6 +42,20 @@ You can uninstall the binary with this command:
 sudo make uninstall
 ```
 
+## Configuration
+
+The configuration file of _controlblock_ is located at ```/etc/controlblockconfig.cfg```. It uses JSON syntax for setting the the values of its configuration parameters.
+
+The parameters are explained in detail in the following:
+
+ - ```input - gamepadtype```: Can be set to 
+     + ```arcade```: Enables two game pads in the system and maps the GPIOs of the ControlBlock to these game pads.
+     + ```mame```: Enables a virtual keyboard and maps the GPIOs of the ControlBlock to this keyboard with a MAME layout.
+     + ```snes```: Enables two game pads in the system and maps the attached SNES/NES controllers accordingly.
+ - ```powerswitch - activated```: Can be set to
+     + ```true```: Activates the handling of the power switch signals of the ControlBlock.
+     + ```false```: Deactivates the handling of the power switch signals of the ControlBlock.
+
 <br><br>
 __Have fun!__
 
