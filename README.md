@@ -49,9 +49,12 @@ The configuration file of _controlblock_ is located at ```/etc/controlblockconfi
 The parameters are explained in detail in the following:
 
  - ```input - gamepadtype```: Can be set to 
-     + ```arcade```: Enables two game pads in the system and maps the GPIOs of the ControlBlock to these game pads.
-     + ```mame```: Enables a virtual keyboard and maps the GPIOs of the ControlBlock to this keyboard with a MAME layout.
-     + ```snes```: Enables two game pads in the system and maps the attached SNES/NES controllers accordingly.
+     + ```arcade```: Enables two game pads in the system and maps the GPIOs of the ControlBlock to these game pads.<br>
+     ![ArcadeMapping](https://github.com/petrockblog/ControlBlockService/raw/master/supplementary/ControlBlockLayoutArcade.png)
+     + ```mame```: Enables a virtual keyboard and maps the GPIOs of the ControlBlock to this keyboard with a MAME layout.<br>
+     ![ArcadeMapping](https://github.com/petrockblog/ControlBlockService/raw/master/supplementary/ControlBlockLayoutMAME.png)
+     + ```snes```: Enables two game pads in the system and maps the attached SNES/NES controllers accordingly.<br>
+     ![ArcadeMapping](https://github.com/petrockblog/ControlBlockService/raw/master/supplementary/ControlBlockLayoutSNESNES.png)
  - ```powerswitch - activated```: Can be set to
      + ```true```: Activates the handling of the power switch signals of the ControlBlock.
      + ```false```: Deactivates the handling of the power switch signals of the ControlBlock.
