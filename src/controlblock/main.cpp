@@ -34,39 +34,43 @@
 static volatile sig_atomic_t doRun = 1;
 
 extern "C" {
-	void sig_handler(int signo) {
-		if ((signo == SIGINT) | (signo == SIGQUIT) | (signo == SIGABRT) | (signo ==
-				SIGTERM)) {
-			std::cout << "[ControlBlock] Releasing input devices." << std::endl;
-			doRun = 0;
-		}
-	}
+void sig_handler(int signo) {
+    if ((signo == SIGINT) | (signo == SIGQUIT) | (signo == SIGABRT) |
+        (signo == SIGTERM)) {
+        std::cout << "[ControlBlock] Releasing input devices." << std::endl;
+        doRun = 0;
+    }
+}
 }
 
 void register_signalhandlers() {
-	/* Register signal handlers  */
-	if (signal(SIGINT, sig_handler) == SIG_ERR ) {
-		std::cout << std::endl << "[ControlBlock] Cannot catch SIGINT" << std::endl;
-	} 
-	if (signal(SIGQUIT, sig_handler) == SIG_ERR ) {
-		std::cout << std::endl << "[ControlBlock] Cannot catch SIGQUIT" << std::endl;
-	} 
-	if (signal(SIGABRT, sig_handler) == SIG_ERR ) {
-		std::cout << std::endl << "[ControlBlock] Cannot catch SIGABRT" << std::endl;
-	} 
-	if (signal(SIGTERM, sig_handler) == SIG_ERR ) {
-		std::cout << std::endl << "[ControlBlock] Cannot catch SIGTERM" << std::endl;
-	}
+    /* Register signal handlers  */
+    if (signal(SIGINT, sig_handler) == SIG_ERR) {
+        std::cout << std::endl << "[ControlBlock] Cannot catch SIGINT"
+                  << std::endl;
+    }
+    if (signal(SIGQUIT, sig_handler) == SIG_ERR) {
+        std::cout << std::endl << "[ControlBlock] Cannot catch SIGQUIT"
+                  << std::endl;
+    }
+    if (signal(SIGABRT, sig_handler) == SIG_ERR) {
+        std::cout << std::endl << "[ControlBlock] Cannot catch SIGABRT"
+                  << std::endl;
+    }
+    if (signal(SIGTERM, sig_handler) == SIG_ERR) {
+        std::cout << std::endl << "[ControlBlock] Cannot catch SIGTERM"
+                  << std::endl;
+    }
 }
 
 int main(int argc, char **argv) {
-	register_signalhandlers();
+    register_signalhandlers();
 
-	ControlBlock controlBlock = ControlBlock();
-	while (doRun) {
-		controlBlock.update();
-		bcm2835_delay(75);
-	}	
+    ControlBlock controlBlock = ControlBlock();
+    while (doRun) {
+        controlBlock.update();
+        bcm2835_delay(75);
+    }
 
-	return 0;
+    return 0;
 }

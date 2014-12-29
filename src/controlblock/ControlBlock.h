@@ -29,20 +29,19 @@
 #include "ControlBlockConfiguration.h"
 
 class ControlBlock {
-public:
-	static const uint8_t NUMGAMEPADS = 2;
+  public:
+    static const uint8_t NUMGAMEPADS = 2;
 
-	ControlBlock();
-	~ControlBlock();
+    ControlBlock();
+    ~ControlBlock();
 
-	void initialize();
-	void update();
+    void initialize();
+    void update();
 
-private:
-	PowerSwitch* powerSwitch;
-	InputDevice* gamepads[NUMGAMEPADS];
-	ControlBlockConfiguration* configuration;
-
+  private:
+    PowerSwitch *powerSwitch;
+    InputDevice *gamepads[NUMGAMEPADS];
+    ControlBlockConfiguration *configuration;
 };
 
-#endif // CONTROLBLOCK_H
+#endif  // CONTROLBLOCK_H

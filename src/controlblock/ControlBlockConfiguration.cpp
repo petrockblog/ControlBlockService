@@ -27,64 +27,66 @@
 
 #include "ControlBlockConfiguration.h"
 
-ControlBlockConfiguration::ControlBlockConfiguration() : gamepadType(GAMEPAD_ARCADE), 
-	doShutdown(SHUTDOWN_ACTIVATED)
-{
+ControlBlockConfiguration::ControlBlockConfiguration()
+    : gamepadType(GAMEPAD_ARCADE), doShutdown(SHUTDOWN_ACTIVATED) {}
+
+ControlBlockConfiguration::~ControlBlockConfiguration() {}
+
+void ControlBlockConfiguration::initialize() {
+    try {
+        Json::Value root;
+        Json::Reader reader;
+
+        std::ifstream t("/etc/controlblockconfig.cfg");
+        std::string config_doc((std::istreambuf_iterator<char>(t)),
+                               std::istreambuf_iterator<char>());
+
+        bool parsingSuccessful = reader.parse(config_doc, root);
+        if (!parsingSuccessful) {
+            std::cout << "[ControlBlock] Failed to parse configuration\n"
+                      << reader.getFormattedErrorMessages();
+            return;
+        }
+
+        std::string configvalue = root["input"]["gamepadtype"].asString();
+        if (configvalue.compare("arcade") == 0) {
+            gamepadType = GAMEPAD_ARCADE;
+            std::cout << "[ControlBlock] Gamepadtype = ARCADE gamepads"
+                      << std::endl;
+        } else if (configvalue.compare("mame") == 0) {
+            gamepadType = GAMEPAD_MAME;
+            std::cout << "[ControlBlock] Gamepadtype = MAME Keyboard"
+                      << std::endl;
+        } else if (configvalue.compare("snes") == 0) {
+            gamepadType = GAMEPAD_SNES;
+            std::cout << "[ControlBlock] Gamepadtype = SNES gamepads"
+                      << std::endl;
+        } else {
+            gamepadType = GAMEPAD_NONE;
+            std::cout << "[ControlBlock] Gamepadtype = NONE" << std::endl;
+        }
+
+        bool configboolean = root["powerswitch"]["activated"].asBool();
+        if (configboolean) {
+            doShutdown = SHUTDOWN_ACTIVATED;
+            std::cout << "[ControlBlock] Shutdown is ACTIVATED" << std::endl;
+        } else {
+            doShutdown = SHUTDOWN_DEACTIVATED;
+            std::cout << "[ControlBlock] Shutdown is DEACTIVATED" << std::endl;
+        }
+    } catch(int errno) {
+        std::cout << "[ControlBlock] Error while initializing "
+                     "ControlBlockConfiguration instance. Error number: "
+                  << errno << std::endl;
+    }
 }
 
-ControlBlockConfiguration::~ControlBlockConfiguration() 
-{
+ControlBlockConfiguration::GamepadType_e
+ControlBlockConfiguration::getGamepadType() const {
+    return gamepadType;
 }
 
-void ControlBlockConfiguration::initialize() 
-{
-	try {
-		Json::Value root;   
-		Json::Reader reader;
-
-		std::ifstream t("/etc/controlblockconfig.cfg");
-		std::string config_doc((std::istreambuf_iterator<char>(t)),
-		                 		std::istreambuf_iterator<char>());
-
-		bool parsingSuccessful = reader.parse( config_doc, root );
-		if ( !parsingSuccessful ) {
-		    std::cout  << "[ControlBlock] Failed to parse configuration\n"
-		               << reader.getFormattedErrorMessages();
-		    return;
-		}
-
-		std::string configvalue = root["input"]["gamepadtype"].asString();
-		if (configvalue.compare("arcade") == 0) {
-			gamepadType = GAMEPAD_ARCADE;
-			std::cout << "[ControlBlock] Gamepadtype = ARCADE gamepads" << std::endl;
-		} else if (configvalue.compare("mame") == 0) {
-			gamepadType = GAMEPAD_MAME;
-			std::cout << "[ControlBlock] Gamepadtype = MAME Keyboard" << std::endl;
-		} else if (configvalue.compare("snes") == 0) {
-			gamepadType = GAMEPAD_SNES;
-			std::cout << "[ControlBlock] Gamepadtype = SNES gamepads" << std::endl;
-		} else {
-			gamepadType = GAMEPAD_NONE;
-			std::cout << "[ControlBlock] Gamepadtype = NONE" << std::endl;
-		}
-
-		bool configboolean = root["powerswitch"]["activated"].asBool();
-		if (configboolean) {
-			doShutdown = SHUTDOWN_ACTIVATED;
-			std::cout << "[ControlBlock] Shutdown is ACTIVATED" << std::endl;
-		} else {
-			doShutdown = SHUTDOWN_DEACTIVATED;
-			std::cout << "[ControlBlock] Shutdown is DEACTIVATED" << std::endl;
-		}
-	} catch (int errno) {
-		std::cout << "[ControlBlock] Error while initializing ControlBlockConfiguration instance. Error number: " << errno << std::endl;
-	}
-}
-
-ControlBlockConfiguration::GamepadType_e ControlBlockConfiguration::getGamepadType() const  {
-	return gamepadType;
-}
-
-ControlBlockConfiguration::ShutdownType_e ControlBlockConfiguration::getShutdownActivation() const {
-	return doShutdown;
+ControlBlockConfiguration::ShutdownType_e
+ControlBlockConfiguration::getShutdownActivation() const {
+    return doShutdown;
 }

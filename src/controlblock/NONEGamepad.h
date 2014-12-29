@@ -27,17 +27,16 @@
 #include "InputDevice.h"
 
 class NONEGamepad : public InputDevice {
-public:
-	NONEGamepad();
-	~NONEGamepad();
+  public:
+    NONEGamepad();
+    ~NONEGamepad();
 
-	virtual void initialize(InputDevice::Channel_e channel);
-	virtual void update();
+    virtual void initialize(InputDevice::Channel_e channel);
+    virtual void update();
 
-private:
-	InputDevice::Channel_e channel;
-	uint32_t uinp_fd;
-
+  private:
+    InputDevice::Channel_e channel;
+    uint32_t uinp_fd;
 };
 
 #endif
