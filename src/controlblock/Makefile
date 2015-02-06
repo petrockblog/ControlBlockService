@@ -4,7 +4,7 @@ BUILDDIR=../../build
 LIBJSONCPP_DIR=../lib/jsoncpp
 LIBJSONCPP_INCDIR=$(LIBJSONCPP_DIR)/include
 LIBJSONCPP_LIBDIR=$(LIBJSONCPP_DIR)/build/release/lib
-LIBBCM2835_DIR=../lib/bcm2835-1.38
+LIBBCM2835_DIR=../lib/bcm2835-1.39
 LIBBCM2835_INCDIR=$(LIBBCM2835_DIR)/src
 LIBBCM2835_LIBDIR=$(LIBBCM2835_DIR)/src
 LIBS=-ljsoncpp -lbcm2835 -L$(LIBJSONCPP_LIBDIR) -I$(LIBJSONCPP_INCDIR) -L$(LIBBCM2835_LIBDIR) -I$(LIBBCM2835_INCDIR) -lrt -lpthread
@@ -29,7 +29,7 @@ $(LIBJSONCPP_LIBDIR)/libjsoncpp.a:
 	cd $(LIBJSONCPP_DIR)/build/release && make	
 
 $(LIBBCM2835_LIBDIR)/libbcm2835.a:
-	cd ../lib && tar zxvf bcm2835-1.38.tar.gz
+	cd ../lib && tar zxvf bcm2835-1.39.tar.gz
 	cd $(LIBBCM2835_DIR) && ./configure
 	cd $(LIBBCM2835_DIR) && $(MAKE)
 
