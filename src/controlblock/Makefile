@@ -1,4 +1,4 @@
-CC=g++
+CC=g++-4.8
 SRCDIR=.
 BUILDDIR=../../build
 LIBJSONCPP_DIR=../lib/jsoncpp
