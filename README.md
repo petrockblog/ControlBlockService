@@ -9,6 +9,15 @@ If you would like to download the latest version of _controlblock_ from [its Git
 ```bash
 git clone https://github.com/petrockblog/ControlBlockService.git
 ```
+## Prerequisites
+
+To be able to successfully build ControlBlockService you need to have certain APT packages installed. You can make sure that you have the latest version of those packages with these commands:
+
+```bash
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get install -y cmake g++-4.8
+```
 
 ## Building and Installation
 
