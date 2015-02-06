@@ -38,6 +38,7 @@ You can install _controlblock_ as daemon with this command:
 ```bash
 sudo make installservice
 ```
+It might be that you need to **restart** your Raspberry afterwards to have all needed services running.
 
 ## Uninstalling the service and/or the binary
 
