@@ -12,3 +12,8 @@ if [[ -z $(cat /etc/modules | grep uinput) ]]; then
 	sed -i '$a uinput' /etc/modules
 fi
 modprobe uinput
+
+echo -e "Making sure that the ARM I2C Interface is enabled via /boot/config.txt ..."
+if [[ -z $(cat /etc/modules | grep uinput) ]]; then
+    sed -i '$a dtparam=i2c_arm=on' /boot/config.txt
+fi
