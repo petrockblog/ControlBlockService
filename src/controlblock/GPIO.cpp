@@ -31,9 +31,7 @@ GPIO::GPIO() : expander1(MCP23017PI(0)), expander2(MCP23017PI(7)) {
         if (!bcm2835_init()) {
             std::cout << "Error initializing GPIO." << std::endl;
         }
-        // bcm2835_i2c_setClockDivider(BCM2835_I2C_CLOCK_DIVIDER_626);
-        bcm2835_i2c_setClockDivider(
-            160); // 250MHz / 160 = 1,5625 Mhz Clock Rate for I2C
+        bcm2835_i2c_setClockDivider(BCM2835_I2C_CLOCK_DIVIDER_626);
 #ifdef DEBUG
         std::cout << "Setting clock divider to "
                   << int(BCM2835_I2C_CLOCK_DIVIDER_626) << std::endl;

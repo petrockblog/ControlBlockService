@@ -36,8 +36,7 @@ void MCP23017PI::begin() {
             printf("Error initializing GPIO.");
             throw 1;
         }
-        // 250MHz / 160 = 1,5625 Mhz Clock Rate for I2C
-        bcm2835_i2c_setClockDivider(160);
+        bcm2835_i2c_setClockDivider(BCM2835_I2C_CLOCK_DIVIDER_626);
         isBCM2835Initialized = true;
     }
 
