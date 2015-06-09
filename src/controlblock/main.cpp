@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
     ControlBlock controlBlock = ControlBlock();
     while (doRun) {
         controlBlock.update();
-        bcm2835_delay(75);
+        bcm2835_delay(50);
     }
 
     return 0;
