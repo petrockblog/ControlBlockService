@@ -38,8 +38,8 @@ ControlBlock::ControlBlock() : configuration(new ControlBlockConfiguration()) {
 
     configuration->initialize();
 
-    uint8_t numGamepads = MAXNUMGAMEPADS;
-    if (configuration->getSingleController() == 
+    numGamepads = MAXNUMGAMEPADS;
+    if (configuration->getSingleGamepad() == 
         ControlBlockConfiguration::SINGLE_GAMEPAD_ACTIVATED) {
         numGamepads = 1;
     } 

@@ -39,7 +39,7 @@ class ControlBlock {
     void update();
 
   private:
-    uint8_t *numgamepads;
+    uint8_t numGamepads;
     PowerSwitch *powerSwitch;
     InputDevice *gamepads[MAXNUMGAMEPADS];
     ControlBlockConfiguration *configuration;
