@@ -30,7 +30,7 @@
 
 class ControlBlock {
   public:
-    static const uint8_t NUMGAMEPADS = 2;
+    static const uint8_t MAXNUMGAMEPADS = 2;
 
     ControlBlock();
     ~ControlBlock();
@@ -39,8 +39,9 @@ class ControlBlock {
     void update();
 
   private:
+    uint8_t *numgamepads;
     PowerSwitch *powerSwitch;
-    InputDevice *gamepads[NUMGAMEPADS];
+    InputDevice *gamepads[MAXNUMGAMEPADS];
     ControlBlockConfiguration *configuration;
 };
 

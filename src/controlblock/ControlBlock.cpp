@@ -38,9 +38,16 @@ ControlBlock::ControlBlock() : configuration(new ControlBlockConfiguration()) {
 
     configuration->initialize();
 
+    uint8_t numGamepads = MAXNUMGAMEPADS;
+    if (configuration->getSingleController() == 
+        ControlBlockConfiguration::SINGLE_GAMEPAD_ACTIVATED) {
+        numGamepads = 1;
+    } 
+
     powerSwitch =
         new PowerSwitch(switchMapping[configuration->getShutdownActivation()]);
-    for (uint8_t counter = 0; counter < NUMGAMEPADS; counter++) {
+
+    for (uint8_t counter = 0; counter < numGamepads; counter++) {
         if (configuration->getGamepadType() ==
             ControlBlockConfiguration::GAMEPAD_ARCADE) {
             gamepads[counter] = new ArcadeGamepad();
@@ -59,7 +66,7 @@ ControlBlock::ControlBlock() : configuration(new ControlBlockConfiguration()) {
 }
 
 ControlBlock::~ControlBlock() {
-    for (uint8_t counter = 0; counter < NUMGAMEPADS; counter++) {
+    for (uint8_t counter = 0; counter < numGamepads; counter++) {
         delete gamepads[counter];
         gamepads[counter] = 0;
     }
@@ -69,7 +76,7 @@ ControlBlock::~ControlBlock() {
 
 void ControlBlock::update() {
     try {
-        for (uint8_t counter = 0; counter < NUMGAMEPADS; counter++) {
+        for (uint8_t counter = 0; counter < numGamepads; counter++) {
             gamepads[counter]->update();
         }
     } catch(int errno) {

@@ -66,6 +66,15 @@ void ControlBlockConfiguration::initialize() {
             std::cout << "[ControlBlock] Gamepadtype = NONE" << std::endl;
         }
 
+        bool configsingleGamepad = root["input"]["singlegamepad"].asBool();
+        if (configboolean) {
+            sigleGamepad = SINGLE_GAMEPAD_ACTIVATED;
+            std::cout << "[ControlBlock] Single gamepad mode ACTIVATED" << std::endl;
+        } else {
+            sigleGamepad = SINGLE_GAMEPAD_DEACTIVATED;
+            std::cout << "[ControlBlock] Single gamepad mode DEACTIVATED" << std::endl;
+        }
+
         bool configboolean = root["powerswitch"]["activated"].asBool();
         if (configboolean) {
             doShutdown = SHUTDOWN_ACTIVATED;
@@ -74,6 +83,7 @@ void ControlBlockConfiguration::initialize() {
             doShutdown = SHUTDOWN_DEACTIVATED;
             std::cout << "[ControlBlock] Shutdown is DEACTIVATED" << std::endl;
         }
+
     } catch(int errno) {
         std::cout << "[ControlBlock] Error while initializing "
                      "ControlBlockConfiguration instance. Error number: "
@@ -84,6 +94,11 @@ void ControlBlockConfiguration::initialize() {
 ControlBlockConfiguration::GamepadType_e
 ControlBlockConfiguration::getGamepadType() const {
     return gamepadType;
+}
+
+ControlBlockConfiguration::SingleGamepadType_e
+ControlBlockConfiguration::getSingleGamepad() const {
+    return sigleGamepad;
 }
 
 ControlBlockConfiguration::ShutdownType_e

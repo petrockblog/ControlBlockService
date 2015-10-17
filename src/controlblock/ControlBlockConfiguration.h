@@ -35,6 +35,11 @@ class ControlBlockConfiguration {
     } GamepadType_e;
 
     typedef enum {
+        SINGLE_GAMEPAD_DEACTIVATED = 0,
+        SINGLE_GAMEPAD_ACTIVATED
+    } SingleGamepadType_e;
+
+    typedef enum {
         SHUTDOWN_DEACTIVATED = 0,
         SHUTDOWN_ACTIVATED
     } ShutdownType_e;
@@ -44,10 +49,12 @@ class ControlBlockConfiguration {
 
     void initialize();
     GamepadType_e getGamepadType() const;
+    SingleGamepadType_e getSingleGamepad() const;
     ShutdownType_e getShutdownActivation() const;
 
   private:
     GamepadType_e gamepadType;
+    SingleGamepadType_e singleGamepad;
     ShutdownType_e doShutdown;
 };
 
