@@ -65,6 +65,9 @@ The parameters are explained in detail in the following:
      ![ArcadeMapping](https://github.com/petrockblog/ControlBlockService/raw/master/supplementary/ControlBlockLayoutMAME.png)
      + ```snes```: Enables two game pads in the system and maps the attached SNES/NES controllers accordingly.<br>
      ![ArcadeMapping](https://github.com/petrockblog/ControlBlockService/raw/master/supplementary/ControlBlockLayoutSNESNES.png)
+ - ```input - singlegamepad```: Can be set to 
+     + ```true```: Enables only one gamepad in the system (eg if only Player1 buttons are wired to the controlblock in your setup, this prevents a ghost gamepad from being selected as default player 2 in retroarch)
+     + ```false```: Enables the two gamepads (default)
  - ```powerswitch - activated```: Can be set to
      + ```true```: Activates the handling of the power switch signals of the ControlBlock.
      + ```false```: Deactivates the handling of the power switch signals of the ControlBlock.
