@@ -19,7 +19,7 @@ function setup_arm_chroot {
     sudo apt-get install -qq -y ${HOST_DEPENDENCIES}
 
     # Create chrooted environment
-    if [ ! -d /${CHROOT_DIR} ]; then
+    if [ ! -e ${CHROOT_DIR}/.chroot_is_done ]; then
       sudo mkdir -p ${CHROOT_DIR}
       pushd /usr/share/debootstrap/scripts; sudo ln -s sid jessie; popd
       sudo debootstrap --foreign --no-check-gpg --include=fakeroot,build-essential \
