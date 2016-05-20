@@ -13,6 +13,7 @@ If you would like to download the latest version of _controlblock_ from [its Git
 ```bash
 git clone https://github.com/petrockblog/ControlBlockService.git
 ```
+
 ## Prerequisites
 
 To be able to successfully build ControlBlockService you need to have certain APT packages installed. You can make sure that you have the latest version of those packages with these commands:
