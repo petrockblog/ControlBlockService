@@ -19,7 +19,7 @@ function setup_arm_chroot {
     sudo apt-get install -qq -y ${HOST_DEPENDENCIES}
 
     # Create chrooted environment
-    if [ ! -e ${CHROOT_DIR}/.chroot_is_done ]; then
+    if [ ! -e ${CHROOT_DIR}/.chroot_is_created ]; then
       sudo mkdir -p ${CHROOT_DIR}
       pushd /usr/share/debootstrap/scripts; sudo ln -s sid jessie; popd
       sudo debootstrap --foreign --no-check-gpg --include=fakeroot,build-essential \
@@ -39,6 +39,7 @@ function setup_arm_chroot {
       sudo chroot ${CHROOT_DIR} apt-get update
       sudo chroot ${CHROOT_DIR} apt-get --allow-unauthenticated install \
           -qq -y ${GUEST_DEPENDENCIES}
+      sudo touch ${CHROOT_DIR}/.chroot_is_created
     else
       # clean up any existing old artefacts
       sudo rm -rf ${CHROOT_DIR}/${TRAVIS_BUILD_DIR}
