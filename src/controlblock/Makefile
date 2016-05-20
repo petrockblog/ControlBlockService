@@ -1,4 +1,5 @@
-CC=g++-4.8
+CC=gcc-4.8
+CXX=g++-4.8
 SRCDIR=.
 BUILDDIR=../../build
 LIBJSONCPP_DIR=../lib/jsoncpp
@@ -17,11 +18,11 @@ OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 DEPS := $(OBJECTS:.o=.deps)
 
 all $(TARGET): $(LIBJSONCPP_LIBDIR)/libjsoncpp.a $(LIBBCM2835_LIBDIR)/libbcm2835.a $(OBJECTS)
-	@echo " Linking..."; $(CC) $^ $(LIBS) -o $(TARGET)
+	@echo " Linking..."; $(CXX) $^ $(LIBS) -o $(TARGET)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(BUILDDIR)
-	@echo " CC $<"; $(CC) $(CFLAGS) -MD -MF $(@:.o=.deps) -c -o $@ $<
+	@echo " CXX $<"; $(CXX) $(CFLAGS) -MD -MF $(@:.o=.deps) -c -o $@ $<
 	
 $(LIBJSONCPP_LIBDIR)/libjsoncpp.a:
 	cd $(LIBJSONCPP_DIR)/ && mkdir -p build/release
