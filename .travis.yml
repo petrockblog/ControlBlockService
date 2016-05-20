@@ -3,10 +3,6 @@ sudo: required
 dist: precise
 language: cpp
 
-cache:
-  directories:
-    - $HOME/arm-chroot
-
 matrix:
   include:
     - compiler: gcc
