@@ -19,25 +19,30 @@ function setup_arm_chroot {
     sudo apt-get install -qq -y ${HOST_DEPENDENCIES}
 
     # Create chrooted environment
-    sudo mkdir -p ${CHROOT_DIR}
-    pushd /usr/share/debootstrap/scripts; sudo ln -s sid jessie; popd
-    sudo debootstrap --foreign --no-check-gpg --include=fakeroot,build-essential \
-        --arch=${CHROOT_ARCH} ${VERSION} ${CHROOT_DIR} ${MIRROR}
-    sudo cp /usr/bin/qemu-arm-static ${CHROOT_DIR}/usr/bin/
-    sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
-    sudo sbuild-createchroot --arch=${CHROOT_ARCH} --foreign --setup-only \
-        ${VERSION} ${CHROOT_DIR} ${MIRROR}
+    if [ ! -d /${CHROOT_DIR} ]; then
+      sudo mkdir -p ${CHROOT_DIR}
+      pushd /usr/share/debootstrap/scripts; sudo ln -s sid jessie; popd
+      sudo debootstrap --foreign --no-check-gpg --include=fakeroot,build-essential \
+          --arch=${CHROOT_ARCH} ${VERSION} ${CHROOT_DIR} ${MIRROR}
+      sudo cp /usr/bin/qemu-arm-static ${CHROOT_DIR}/usr/bin/
+      sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
+      sudo sbuild-createchroot --arch=${CHROOT_ARCH} --foreign --setup-only \
+          ${VERSION} ${CHROOT_DIR} ${MIRROR}
 
-    # Create file with environment variables which will be used inside chrooted
-    # environment
-    echo "export ARCH=${ARCH}" > envvars.sh
-    echo "export TRAVIS_BUILD_DIR=${TRAVIS_BUILD_DIR}" >> envvars.sh
-    chmod a+x envvars.sh
+      # Create file with environment variables which will be used inside chrooted
+      # environment
+      echo "export ARCH=${ARCH}" > envvars.sh
+      echo "export TRAVIS_BUILD_DIR=${TRAVIS_BUILD_DIR}" >> envvars.sh
+      chmod a+x envvars.sh
 
-    # Install dependencies inside chroot
-    sudo chroot ${CHROOT_DIR} apt-get update
-    sudo chroot ${CHROOT_DIR} apt-get --allow-unauthenticated install \
-        -qq -y ${GUEST_DEPENDENCIES}
+      # Install dependencies inside chroot
+      sudo chroot ${CHROOT_DIR} apt-get update
+      sudo chroot ${CHROOT_DIR} apt-get --allow-unauthenticated install \
+          -qq -y ${GUEST_DEPENDENCIES}
+    else
+      # clean up any existing old artefacts
+      sudo rm -rf ${CHROOT_DIR}/${TRAVIS_BUILD_DIR}
+    fi
 
     # Create build dir and copy travis build files to our chroot environment
     sudo mkdir -p ${CHROOT_DIR}/${TRAVIS_BUILD_DIR}
@@ -59,6 +64,7 @@ if [ -e "/.chroot_is_done" ]; then
   echo "Running tests"
   echo "Environment: $(uname -a)"
   # Commands used to run the tests
+  make clean
   make
   make install
 
