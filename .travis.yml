@@ -5,7 +5,7 @@ language: cpp
 
 cache:
   directories:
-    - /tmp/arm-chroot
+    - $HOME/arm-chroot
 
 matrix:
   include:

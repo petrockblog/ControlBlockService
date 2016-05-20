@@ -2,7 +2,7 @@
 # Based on a test script from avsm/ocaml repo https://github.com/avsm/ocaml
 # based on the script from https://www.tomaz.me/2013/12/02/running-travis-ci-tests-on-arm.html
 
-CHROOT_DIR=$HOME/.cache/arm-chroot
+CHROOT_DIR=$HOME/arm-chroot
 MIRROR=http://archive.raspbian.org/raspbian
 
 VERSION=jessie
