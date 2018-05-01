@@ -26,10 +26,10 @@
 #include <thread>
 #include <signal.h>
 
-#include <bcm2835.h>
-#include "ControlBlock.h"
-#include "PowerSwitch.h"
-#include "GPIO.h"
+#include "bcm2835.h"
+#include "app/ControlBlock.h"
+#include "app/PowerSwitch.h"
+#include "hal/GPIO.h"
 
 static volatile sig_atomic_t doRun = 1;
 
