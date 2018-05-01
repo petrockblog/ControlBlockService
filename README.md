@@ -7,13 +7,6 @@ This is the driver for the petrockblock.com ControlBlock, which is an extension 
 
 **Please note that this is the driver for revision 1.X of the ControlBlock. If you have a revision 2.X board, you need to use the [driver for that revision series](https://github.com/petrockblog/ControlBlockService2).**
 
-## Downloading
-
-If you would like to download the latest version of _controlblock_ from [its Github repository](https://github.com/petrockblog/ControlBlockService), you can use this command:
-```bash
-git clone https://github.com/petrockblog/ControlBlockService.git
-```
-
 ## Prerequisites
 
 To be able to successfully build ControlBlockService you need to have certain APT packages installed. You can make sure that you have the latest version of those packages with these commands:
@@ -21,7 +14,26 @@ To be able to successfully build ControlBlockService you need to have certain AP
 ```bash
 sudo apt-get update
 sudo apt-get upgrade -y
-sudo apt-get install -y cmake g++-4.8
+sudo apt-get install -y git cmake g++-4.9 doxygen
+```
+
+## Downloading
+
+If you would like to download the latest version of _controlblock_ from [its Github repository](https://github.com/petrockblog/ControlBlockService), you can use this command:
+```bash
+git clone --recursive https://github.com/petrockblog/ControlBlockService.git
+```
+
+Note that the above command also takes care for downloading the included Git submodules.
+
+## Quick Installation
+
+There comes an installation script with this reposity that does all the steps described below: `install.sh` This script compiles the driver, installs the binary and configuration files, and installs the ControlBlock service. 
+
+To run the quick installation, you just need to call this one line from the Raspbian console
+
+```bash
+wget -O - https://raw.githubusercontent.com/petrockblog/ControlBlockService/master/install.sh | sudo bash
 ```
 
 ## Building and Installation
@@ -29,17 +41,20 @@ sudo apt-get install -y cmake g++-4.8
 To build _controlblock_ follow these commands:
 ```bash
 cd ControlBlockService
+mkdir build
+cd build
+cmake ..
 make
 ```
 
-If everything went fine you can install with the command
+If everything went fine you can install the driver from within the folder `build` with the command
 ```bash
 sudo make install
 ```
 
 ## Installation as Service
 
-You can install _controlblock_ as daemon with this command:
+You can install _controlblock_ as daemon from within the folder `build` with this command:
 ```bash
 sudo make installservice
 ```
@@ -47,7 +62,7 @@ It might be that you need to **restart** your Raspberry afterwards to have all n
 
 ## Uninstalling the service and/or the binary
 
-You can uninstall the daemon with this command:
+You can uninstall the daemon from within the folder `build` with this command:
 ```bash
 sudo make uninstallservice
 ```
